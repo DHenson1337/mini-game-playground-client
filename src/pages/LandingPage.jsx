@@ -29,7 +29,7 @@ function LandingPage() {
     <div className="landing-container">
       <div className="landing-content">
         <h1>Welcome to the Mini Game Playground ^_^</h1>
-        <p>Enter your username and select an avatar to begin</p>
+        <p>Enter a Nickname and select an avatar to begin</p>
 
         <form onSubmit={handleSubmit} className="landing-form">
           {/* UserName Section */}
