@@ -42,6 +42,21 @@
   outline: none;
 }
 
+.form-input.input-error {
+  border-color: #ff4444;
+}
+
+.error-message {
+  color: #ff4444;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.submit-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* Avatar selection grid */
 .avatar-grid {
   display: grid;
