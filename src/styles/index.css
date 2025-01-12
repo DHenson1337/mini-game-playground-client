@@ -1,0 +1,47 @@
+/* Import variables */
+@import "./variables.css";
+
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: var(--background);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+/* Common utility classes */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+/* Layout styles */
+main {
+  min-height: calc(100vh - 140px);
+  padding: var(--spacing-lg);
+}
+
+/* Common form styles */
+input,
+button {
+  font-family: inherit;
+}
+
+/* Accessibility styles */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}

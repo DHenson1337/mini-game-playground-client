@@ -1,11 +1,22 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import "./LandingPage.css";
+import "./styles/LandingPage.css";
+/* 
+Landing Page Component
+Handles user registration and avater selection before entering the game platform
+*/
 
 function LandingPage() {
+  //States for form inputs
   const [username, setUsername] = useState("");
   const [selectedAvatar, setSelectedAvatar] = useState("");
   const navigate = useNavigate();
+
+  /**
+   * Handle form submission
+   * Validates inputs and creates new user
+   * @param {Event} e - Form submission event
+   */
 
   const handleSubmit = (e) => {
     e.preventDefault();

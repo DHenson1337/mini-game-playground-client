@@ -1,0 +1,25 @@
+/* CSS Variables for consistent theming */
+:root {
+  /* Color palette */
+  --primary: #6366f1;
+  --background: #1a1a1a;
+  --text: #ffffff;
+  --text-secondary: #a1a1a1;
+
+  /* Spacing */
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 2rem;
+
+  /* Border radius */
+  --border-radius: 0.5rem;
+
+  /* Transitions */
+  --transition-speed: 0.3s;
+}
+
+/* Dark theme variables (But lets be honest, there is no lightmode :>) */
+[data-theme="dark"] {
+  --background: #1a1a1a;
+  --text: #ffffff;
+}

@@ -1,0 +1,66 @@
+/* Landing Page specific styles */
+.landing-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-lg);
+}
+
+.landing-content {
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+}
+
+.landing-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-lg);
+}
+
+/* Form elements styling */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  text-align: left;
+}
+
+.form-input {
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius);
+  border: 1px solid #444;
+  background-color: #2a2a2a;
+  color: var(--text);
+  transition: border-color var(--transition-speed);
+}
+
+.form-input:focus {
+  border-color: var(--primary);
+  outline: none;
+}
+
+/* Avatar selection grid */
+.avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-md);
+}
+
+/* Submit button styling */
+.submit-button {
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius);
+  border: none;
+  background-color: var(--primary);
+  color: var(--text);
+  font-weight: bold;
+  cursor: pointer;
+  transition: opacity var(--transition-speed);
+}
+
+.submit-button:hover {
+  opacity: 0.9;
+}
