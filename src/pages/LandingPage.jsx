@@ -1,14 +1,64 @@
+import { useState } from "react";
+import { useNavigate } from "react-router";
+import "./LandingPage.css";
+
 function LandingPage() {
+  const [username, setUsername] = useState("");
+  const [selectedAvatar, setSelectedAvatar] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (username && selectedAvatar) {
+      //Todo add back end API to create user
+      navigate("/games"); //Goes to the gamesView section after user is created
+    }
+  };
   return (
-    <div>
-      <h1>Welcome to Mini Game Playground</h1>
-      <div>
-        <h2>Enter Username</h2>
-        {/* Username input will go here */}
-      </div>
-      <div>
-        <h2>Select Avatar</h2>
-        {/* Avatar selection will go here */}
+    <div className="landing-container">
+      <div className="landing-content">
+        <h1>Welcome to the Mini Game Playground ^_^</h1>
+        <p>Enter your username and select an avatar to begin</p>
+
+        <form onSubmit={handleSubmit} className="landing-form">
+          {/* UserName Section */}
+          <div className="form-group">
+            <label htmlFor="username">Username:</label>
+            <input
+              type="text"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Enter username"
+              minLength={3}
+              maxLength={12}
+              required
+            />
+          </div>
+          {/* Avatar Section */}
+          <div className="form-group">
+            <label>Select Avatar:</label>
+            <div className="avatar-grid">
+              {/* Todo: Add images for Avatars */}
+              {["avatar1", "avatar2", "avatar3"].map((avatar) => (
+                <button
+                  key={avatar}
+                  type="button"
+                  className={`avatar-button ${
+                    selectedAvatar === avatar ? "selected" : ""
+                  }`}
+                  onClick={() => setSelectedAvatar(avatar)}
+                >
+                  {avatar}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <button type="submit" className="submit-button">
+            Start Playing
+          </button>
+        </form>
       </div>
     </div>
   );

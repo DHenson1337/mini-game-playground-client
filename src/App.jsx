@@ -4,6 +4,7 @@ import LandingPage from "./pages/LandingPage";
 import GameSelection from "./pages/GameSelection";
 import GameView from "./pages/GameView";
 import Leaderboard from "./pages/Leaderboard";
+import "./index.css";
 
 function App() {
   return (
