@@ -1,6 +1,71 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import "./styles/LandingPage.css";
+
+//Avatar (Profile Pics) Imports
+import cowledIcon from "../assets/avatars/cowled.svg";
+import femaleVampireIcon from "../assets/avatars/femaleVampire.svg";
+import hoodIcon from "../assets/avatars/hood.svg";
+import overlordIcon from "../assets/avatars/overlord.svg";
+import quickManIcon from "../assets/avatars/quickMan.svg";
+import visoredHelmIcon from "../assets/avatars/visoredHelm.svg";
+import wizardIcon from "../assets/avatars/wizard.svg";
+import womanElfIcon from "../assets/avatars/womanElf.svg";
+import witchIcon from "../assets/avatars/witch.svg";
+
+//Avatar section
+const AVATARS = [
+  {
+    id: "cowled",
+    name: "Cowled",
+    image: cowledIcon,
+  },
+
+  {
+    id: "hood",
+    name: "Hood",
+    image: hoodIcon,
+  },
+  {
+    id: "wizard",
+    name: "Wizard",
+    image: wizardIcon,
+  },
+
+  {
+    id: "femaleVampire",
+    name: "Female Vampire",
+    image: femaleVampireIcon,
+  },
+
+  {
+    id: "femaleElf",
+    name: "Female Elf",
+    image: womanElfIcon,
+  },
+  {
+    id: "witch",
+    name: "Witch",
+    image: witchIcon,
+  },
+  {
+    id: "overlord",
+    name: "Overlord",
+    image: overlordIcon,
+  },
+
+  {
+    id: "visoredHelm",
+    name: "Visored Helm",
+    image: visoredHelmIcon,
+  },
+  {
+    id: "quickMan",
+    name: "Quick Man",
+    image: quickManIcon,
+  },
+];
+
 /* 
 Landing Page Component
 Handles user registration and avater selection before entering the game platform
@@ -18,6 +83,11 @@ function LandingPage() {
    * Validates inputs and creates new user
    * @param {Event} e - Form submission event
    */
+
+  // Avatar (the not so last codebender) selection handler
+  const handleAvatarSelect = (avatarId) => {
+    setSelectedAvatar(avatarId);
+  };
 
   //Username validation function
   const validateusername = (value) => {
@@ -66,7 +136,7 @@ function LandingPage() {
       <div className="landing-content">
         <h1>Welcome to Mini Game Playground</h1>
         <p>Enter a NickName and select an avatar to begin</p>
-
+        {/* User input */}
         <form onSubmit={handleSubmit} className="landing-form">
           <div className="form-group">
             <label htmlFor="username">NickName:</label>
@@ -84,7 +154,30 @@ function LandingPage() {
             )}
           </div>
 
-          {/* Avatar selection will go here */}
+          {/* Avatar selection grid */}
+          <div className="form-group">
+            <label>
+              Select Avatar:
+              <div className="avatar-grid">
+                {AVATARS.map((avatar) => (
+                  <button
+                    key={avatar.id}
+                    type="button"
+                    className={`avatar-button ${
+                      selectedAvatar === avatar.id ? "selected" : ""
+                    }`}
+                    onClick={() => handleAvatarSelect(avatar.id)}
+                  >
+                    <img
+                      src={avatar.image}
+                      alt={avatar.name}
+                      className="avatar-image"
+                    />
+                  </button>
+                ))}
+              </div>
+            </label>
+          </div>
 
           <button
             type="submit"
