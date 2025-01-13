@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router"; // Re-adding useNavigate
 import "./styles/GameSelection.css";
 import API_URLS from "../utils/apiUrls";
+import { getGameImage } from "../utils/gameImages";
 
 const GameSelection = () => {
   const navigate = useNavigate();
@@ -63,7 +64,13 @@ const GameSelection = () => {
   if (error) {
     return (
       <div className="error-container">
-        <p>Error: {`Sorry the game server is Down 📴`}</p>
+        <p>
+          Error:{" "}
+          {`Sorry the game server is Down :< 
+        \n
+        ${error}
+        `}
+        </p>
         <button onClick={() => window.location.reload()}>Try Again</button>
       </div>
     );
@@ -82,6 +89,7 @@ const GameSelection = () => {
     <div className="game-selection-container">
       {/* Game Grid Section */}
       <div className="game-grid-section">
+        <h1 className="grid-title">Choose Your Game!</h1>
         <div className="game-grid">
           {/* Top row: 4 games */}
           <div className="grid-row top-row">
@@ -92,7 +100,7 @@ const GameSelection = () => {
                           ${selectedGame?.id === game.id ? "selected" : ""}`}
                 onClick={() => handleGameSelect(game)}
               >
-                <img src={game.imageUrl} alt={game.title} />
+                <img src={getGameImage(game.gameId)} alt={game.title} />
                 <div className="game-card-title">{game.title}</div>
               </div>
             ))}
@@ -107,7 +115,7 @@ const GameSelection = () => {
                           ${selectedGame?.id === game.id ? "selected" : ""}`}
                 onClick={() => handleGameSelect(game)}
               >
-                <img src={game.imageUrl} alt={game.title} />
+                <img src={getGameImage(game.gameId)} alt={game.title} />
                 <div className="game-card-title">{game.title}</div>
               </div>
             ))}
@@ -122,7 +130,7 @@ const GameSelection = () => {
             <h2>{selectedGame.title}</h2>
             <div className="preview-image-container">
               <img
-                src={selectedGame.imageUrl}
+                src={getGameImage(selectedGame.gameId, "preview")}
                 alt={selectedGame.title}
                 className="preview-image"
               />
