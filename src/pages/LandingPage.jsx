@@ -19,50 +19,59 @@ const AVATARS = [
     id: "cowled",
     name: "Cowled",
     image: cowledIcon,
+    // To do figure out why adding a type causes this to hover across the grid
   },
 
   {
     id: "hood",
     name: "Hood",
     image: hoodIcon,
+    type: "stealth",
   },
   {
     id: "wizard",
     name: "Wizard",
     image: wizardIcon,
+    type: "magic",
   },
 
   {
     id: "femaleVampire",
     name: "Female Vampire",
     image: femaleVampireIcon,
+    type: "evil",
   },
 
   {
     id: "femaleElf",
     name: "Female Elf",
     image: womanElfIcon,
+    type: "nature",
   },
   {
     id: "witch",
     name: "Witch",
     image: witchIcon,
+    type: "magic",
   },
   {
     id: "overlord",
     name: "Overlord",
     image: overlordIcon,
+    type: "evil",
   },
 
   {
     id: "visoredHelm",
     name: "Visored Helm",
     image: visoredHelmIcon,
+    type: "warrior",
   },
   {
     id: "quickMan",
     name: "Quick Man",
     image: quickManIcon,
+    type: "warrior",
   },
 ];
 
@@ -163,6 +172,7 @@ function LandingPage() {
                   <button
                     key={avatar.id}
                     type="button"
+                    data-type={avatar.type}
                     className={`avatar-button ${
                       selectedAvatar === avatar.id ? "selected" : ""
                     }`}
