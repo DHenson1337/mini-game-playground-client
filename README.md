@@ -28,6 +28,10 @@ Female elf face icon - https://game-icons.net/1x1/delapouite/woman-elf-face.html
 by Cathelineau under CC BY 3.0
 Witch face icon - https://game-icons.net/1x1/cathelineau/witch-face.html
 
+Audio Icon on/off - https://icons8.com/icon/hfXXwcg8qpqT/audio
+
+Logo - Logo.com
+
 TODO:
 
 Fix Hover effect bug on landing page grid.
