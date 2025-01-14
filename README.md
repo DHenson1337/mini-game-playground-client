@@ -35,3 +35,4 @@ Logo - Logo.com
 TODO:
 
 Fix Hover effect bug on landing page grid.
+Clean up landing page to use the avatarUtil

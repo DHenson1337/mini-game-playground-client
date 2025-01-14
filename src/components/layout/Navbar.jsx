@@ -5,30 +5,8 @@ import {
   removeUserFromSession,
 } from "../../utils/userSession";
 import "./styles/Navbar.css";
-
+import { AVATAR_IMAGES, getAvatarImage } from "../../utils/avatarUtils";
 // Import avatar images
-import cowledIcon from "../../assets/avatars/cowled.svg";
-import femaleVampireIcon from "../../assets/avatars/femaleVampire.svg";
-import hoodIcon from "../../assets/avatars/hood.svg";
-import overlordIcon from "../../assets/avatars/overlord.svg";
-import quickManIcon from "../../assets/avatars/quickMan.svg";
-import visoredHelmIcon from "../../assets/avatars/visoredHelm.svg";
-import wizardIcon from "../../assets/avatars/wizard.svg";
-import womanElfIcon from "../../assets/avatars/womanElf.svg";
-import witchIcon from "../../assets/avatars/witch.svg";
-
-// Avatar mapping object
-const AVATAR_IMAGES = {
-  cowled: cowledIcon,
-  femaleVampire: femaleVampireIcon,
-  hood: hoodIcon,
-  overlord: overlordIcon,
-  quickMan: quickManIcon,
-  visoredHelm: visoredHelmIcon,
-  wizard: wizardIcon,
-  womanElf: womanElfIcon,
-  witch: witchIcon,
-};
 
 const Navbar = () => {
   const [isAudioEnabled, setIsAudioEnabled] = useState(true);
@@ -131,8 +109,9 @@ const Navbar = () => {
         <div className="user-menu">
           {userData && (
             <>
+              {/* Avatar Image */}
               <img
-                src={AVATAR_IMAGES[userData.avatar]}
+                src={getAvatarImage(userData.avatar)}
                 alt={`${userData.username}'s Avatar`}
                 className="user-avatar"
                 onClick={toggleDropdown}
@@ -140,8 +119,9 @@ const Navbar = () => {
               {isDropdownOpen && (
                 <div className="dropdown-menu">
                   <div className="dropdown-header">
+                    {/* Avatar Image */}
                     <img
-                      src={AVATAR_IMAGES[userData.avatar]}
+                      src={getAvatarImage(userData.avatar)}
                       alt={`${userData.username}'s Avatar`}
                       className="dropdown-avatar"
                     />
