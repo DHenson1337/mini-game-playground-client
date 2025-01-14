@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import "./styles/LandingPage.css";
 import { saveUserToSession } from "../utils/userSession";
 import API_URLS from "../utils/apiUrls";
+import SuccessMessage from "../components/SuccessMessage";
 
 //Avatar (Profile Pics) Imports
 import cowledIcon from "../assets/avatars/cowled.svg";
@@ -88,6 +89,7 @@ function LandingPage() {
   const [usernameError, setUsernameError] = useState("");
   const [selectedAvatar, setSelectedAvatar] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const navigate = useNavigate();
 
   /**
@@ -160,11 +162,12 @@ function LandingPage() {
       saveUserToSession(userData);
 
       // Show success message
-      // You can use a modal, toast, or simple alert for now
-      alert("Welcome to Mini Game Playground! Enjoy your session!");
+      setShowSuccess(true);
 
-      //navigate to games page
-      navigate("/games");
+      //Navigate after success message closes
+      setTimeout(() => {
+        navigate("/games");
+      }, 3000);
     } catch (error) {
       console.error("Failed to create user:", error);
       setUsernameError(error.message);
@@ -173,64 +176,73 @@ function LandingPage() {
     }
   };
   return (
-    <div className="landing-container">
-      <div className="landing-content">
-        <h1>Welcome to Mini Game Playground</h1>
-        <p>Enter a NickName and select an avatar to begin</p>
-        {/* User input */}
-        <form onSubmit={handleSubmit} className="landing-form">
-          <div className="form-group">
-            <label htmlFor="username">NickName:</label>
-            <input
-              type="text"
-              id="username"
-              className={`form-input ${usernameError ? "input-error" : ""}`}
-              value={username}
-              onChange={handleUsernameChange}
-              placeholder="Enter NickName (3-12 characters)"
-              maxLength={12}
-            />
-            {usernameError && (
-              <span className="error-message">{usernameError}</span>
-            )}
-          </div>
+    <>
+      <div className="landing-container">
+        <div className="landing-content">
+          <h1>Welcome to Mini Game Playground</h1>
+          <p>Enter a NickName and select an avatar to begin</p>
+          {/* User input */}
+          <form onSubmit={handleSubmit} className="landing-form">
+            <div className="form-group">
+              <label htmlFor="username">NickName:</label>
+              <input
+                type="text"
+                id="username"
+                className={`form-input ${usernameError ? "input-error" : ""}`}
+                value={username}
+                onChange={handleUsernameChange}
+                placeholder="Enter NickName (3-12 characters)"
+                maxLength={12}
+              />
+              {usernameError && (
+                <span className="error-message">{usernameError}</span>
+              )}
+            </div>
 
-          {/* Avatar selection grid */}
-          <div className="form-group">
-            <label>
-              Select Avatar:
-              <div className="avatar-grid">
-                {AVATARS.map((avatar) => (
-                  <button
-                    key={avatar.id}
-                    type="button"
-                    data-type={avatar.type}
-                    className={`avatar-button ${
-                      selectedAvatar === avatar.id ? "selected" : ""
-                    }`}
-                    onClick={() => handleAvatarSelect(avatar.id)}
-                  >
-                    <img
-                      src={avatar.image}
-                      alt={avatar.name}
-                      className="avatar-image"
-                    />
-                  </button>
-                ))}
-              </div>
-            </label>
-          </div>
-          {/* Form Submission */}
-          <button
-            type="submit"
-            className="submit-button"
-            disabled={!!usernameError || !username || !selectedAvatar}
-          >
-            {isLoading ? "Creating Acount..." : "Start Playing"}
-          </button>
-        </form>
+            {/* Avatar selection grid */}
+            <div className="form-group">
+              <label>
+                Select Avatar:
+                <div className="avatar-grid">
+                  {AVATARS.map((avatar) => (
+                    <button
+                      key={avatar.id}
+                      type="button"
+                      data-type={avatar.type}
+                      className={`avatar-button ${
+                        selectedAvatar === avatar.id ? "selected" : ""
+                      }`}
+                      onClick={() => handleAvatarSelect(avatar.id)}
+                    >
+                      <img
+                        src={avatar.image}
+                        alt={avatar.name}
+                        className="avatar-image"
+                      />
+                    </button>
+                  ))}
+                </div>
+              </label>
+            </div>
+            {/* Form Submission */}
+            <button
+              type="submit"
+              className="submit-button"
+              disabled={!!usernameError || !username || !selectedAvatar}
+            >
+              {isLoading ? "Creating Acount..." : "Start Playing"}
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
+      {/* SuccesMessage */}
+      {showSuccess && (
+        <SuccessMessage
+          message="Welcome to Mini Game Playground! Enjoy your session!"
+          onClose={() => setShowSuccess(false)}
+        />
+      )}
+    </>
   );
 }
 

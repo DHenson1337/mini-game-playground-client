@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router";
+import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/layout/Layout";
 import LandingPage from "./pages/LandingPage";
 import GameSelection from "./pages/GameSelection";
@@ -12,11 +13,36 @@ function App() {
       {/* Landing page is separate from main layout */}
       <Route path="/" element={<LandingPage />} />
 
-      {/* All other pages use the main layout */}
+      {/* All other pages are protected */}
       <Route element={<Layout />}>
-        <Route path="/games" element={<GameSelection />} />
-        <Route path="/games/:gameId" element={<GameView />} />
-        <Route path="/leaderboard" element={<Leaderboard />} />
+        {/*GamePage  */}
+        <Route
+          path="/games"
+          element={
+            <ProtectedRoute>
+              <GameSelection />
+            </ProtectedRoute>
+          }
+        />
+        {/* Game ViewPage */}
+        <Route
+          path="/games/:gameId"
+          element={
+            <ProtectedRoute>
+              <GameView />
+            </ProtectedRoute>
+          }
+        />
+        {/* Leaderboard Page */}
+        <Route
+          path="/leaderboard"
+          element={
+            <ProtectedRoute>
+              <Leaderboard />
+            </ProtectedRoute>
+          }
+        />
+
         {/* Catch any unknown routes */}
         <Route path="*" element={<NotFound />} />
       </Route>
