@@ -183,6 +183,58 @@
   cursor: not-allowed;
 }
 
+/* Loading button styles */
+.submit-button.loading {
+  position: relative;
+  padding-left: 2.5rem;
+  opacity: 0.8;
+}
+
+.submit-button.loading::before {
+  content: "";
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid var(--text);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Loading overlay */
+.form-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--border-radius);
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Animations for loading*/
+@keyframes spin {
+  to {
+    transform: translateY(-50%) rotate(360deg);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 /* Pulsing animation */
 @keyframes pulse {
   0% {

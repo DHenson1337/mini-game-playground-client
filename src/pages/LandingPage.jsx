@@ -133,10 +133,12 @@ function LandingPage() {
     const error = validateusername(username);
     if (error) {
       setUsernameError(error);
+      setIsLoading(false);
       return;
     }
     if (!selectedAvatar) {
       //Todo Avatar validation...(someday)
+      setIsLoading(false);
       return;
     }
     try {
@@ -225,13 +227,24 @@ function LandingPage() {
               </label>
             </div>
             {/* Form Submission */}
-            <button
-              type="submit"
-              className="submit-button"
-              disabled={!!usernameError || !username || !selectedAvatar}
-            >
-              {isLoading ? "Creating Acount..." : "Start Playing"}
-            </button>
+            <div className="form-group" style={{ position: "relative" }}>
+              <button
+                type="submit"
+                className={`submit-button ${isLoading ? "loading" : ""}`}
+                disabled={
+                  !!usernameError || !username || !selectedAvatar || isLoading
+                }
+              >
+                {isLoading ? "Creating Account..." : "Start Playing"}
+              </button>
+              {isLoading && (
+                <div className="form-loading-overlay">
+                  <span style={{ color: "var(--text)" }}>
+                    Setting up your profile...
+                  </span>
+                </div>
+              )}
+            </div>
           </form>
         </div>
       </div>
