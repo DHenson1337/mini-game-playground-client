@@ -9,7 +9,7 @@ function Layout() {
         <Outlet />
       </main>
       <footer>
-        <p>© 2024 Mini Game Playground</p>
+        <p>© 2025 Mini Game Playground</p>
       </footer>
     </div>
   );

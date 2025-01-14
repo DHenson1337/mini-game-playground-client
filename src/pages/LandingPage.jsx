@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import "./styles/LandingPage.css";
+import { saveUserToSession } from "../utils/userSession";
+import API_URLS from "../utils/apiUrls";
 
 //Avatar (Profile Pics) Imports
 import cowledIcon from "../assets/avatars/cowled.svg";
@@ -85,6 +87,7 @@ function LandingPage() {
   const [username, setUsername] = useState("");
   const [usernameError, setUsernameError] = useState("");
   const [selectedAvatar, setSelectedAvatar] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   /**
@@ -124,6 +127,7 @@ function LandingPage() {
   //Form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true); // Start Loading State
     const error = validateusername(username);
     if (error) {
       setUsernameError(error);
@@ -134,10 +138,38 @@ function LandingPage() {
       return;
     }
     try {
-      //Todo: API call to create user
+      const response = await fetch(API_URLS.USERS, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username,
+          avatar: selectedAvatar, // Saving the avatar ID
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to create user");
+      }
+
+      const userData = await response.json();
+
+      // Save user data to session
+      saveUserToSession(userData);
+
+      // Show success message
+      // You can use a modal, toast, or simple alert for now
+      alert("Welcome to Mini Game Playground! Enjoy your session!");
+
+      //navigate to games page
       navigate("/games");
     } catch (error) {
       console.error("Failed to create user:", error);
+      setUsernameError(error.message);
+    } finally {
+      setIsLoading(false); //Ends loading regardless of outcome
     }
   };
   return (
@@ -188,13 +220,13 @@ function LandingPage() {
               </div>
             </label>
           </div>
-
+          {/* Form Submission */}
           <button
             type="submit"
             className="submit-button"
             disabled={!!usernameError || !username || !selectedAvatar}
           >
-            Start Playing
+            {isLoading ? "Creating Acount..." : "Start Playing"}
           </button>
         </form>
       </div>
