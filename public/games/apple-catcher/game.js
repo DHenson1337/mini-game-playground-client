@@ -108,7 +108,7 @@ class GameScene extends Phaser.Scene {
    */
   create() {
     // Start in paused state until player clicks start
-    this.scene.pause();
+    // this.scene.pause();
 
     // Initialize all game systems
     this.setupAudio();
