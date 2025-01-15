@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router"; // Re-adding useNavigate
+import { useNavigate } from "react-router";
 import "./styles/GameSelection.css";
 import API_URLS from "../utils/apiUrls";
 import { getGameImage } from "../utils/gameImages";
@@ -46,7 +46,7 @@ const GameSelection = () => {
   // Handle play button click
   const handlePlayGame = () => {
     if (selectedGame?.enabled) {
-      navigate(`/games/${selectedGame.id}`); // Using navigate instead of window.location
+      navigate(`/games/${selectedGame.gameId}`); // Using navigate
     }
   };
 
