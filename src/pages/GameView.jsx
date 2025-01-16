@@ -1,3 +1,10 @@
+import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate, useParams } from "react-router"; // Updated import
+import { getUserFromSession } from "../utils/userSession";
+import TetrisGame from "../components/games/TetrisGame";
+import { apiService } from "../utils/apiService";
+import "./styles/GameView.css";
+
 const GameView = () => {
   const navigate = useNavigate();
   const { gameId } = useParams();

@@ -4,6 +4,7 @@ import { getGameImage } from "../utils/gameImages";
 import API_URLS from "../utils/apiUrls";
 import { getAvatarImage } from "../utils/avatarUtils";
 import { apiService } from "../utils/apiService";
+
 import "./styles/Leaderboard.css";
 
 const SCORES_PER_PAGE = 10;
