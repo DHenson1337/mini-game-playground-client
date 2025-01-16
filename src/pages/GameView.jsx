@@ -57,13 +57,19 @@ const GameView = () => {
     if (!userData || !gameId) return;
 
     try {
-      await apiService.submitScore({
+      const response = await apiService.submitScore({
         username: userData.username,
         gameId,
         score,
       });
+
+      if (response) {
+        console.log("Score submitted successfully:", score);
+        // Optionally show a success message to the user
+      }
     } catch (error) {
       console.error("Failed to submit score:", error);
+      // Optionally show an error message to the user
     }
   };
 

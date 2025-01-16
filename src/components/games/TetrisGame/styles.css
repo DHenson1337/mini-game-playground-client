@@ -21,9 +21,11 @@
 
 .tetris-game {
   display: grid;
-  grid-template-columns: 200px 1fr 200px;
+  grid-template-columns: 200px minmax(300px, 1fr) 200px; 
   gap: var(--spacing-lg);
   align-items: start;
+  max-width: 1200px; 
+  margin: 0 auto; /
 }
 
 /* Game panels styling */
@@ -43,8 +45,9 @@
   padding: var(--spacing-md);
   border-radius: var(--border-radius);
   border: 2px solid var(--primary);
+  min-width: 300px; 
+  aspect-ratio: 1/2; 
 }
-
 /* Stats styling */
 .game-stats {
   background: rgba(0, 0, 0, 0.2);
@@ -151,8 +154,8 @@
 .game-block {
   margin: 0;
   padding: 0;
-  width: 1.5em;
-  height: 1.5em;
+  width: 2em; 
+  height: 2em; 
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 

@@ -8,22 +8,30 @@ const TetrisGame = ({ onScoreUpdate }) => {
 
   // Handle game state changes
   useEffect(() => {
-    const handleKeyPress = (e) => {
-      if (e.key === "Escape" && gameState === "playing") {
-        setGameState("paused");
+    // Prevent arrow keys from scrolling the page
+    const preventArrowScroll = (e) => {
+      if (
+        [" ", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)
+      ) {
+        e.preventDefault();
       }
     };
 
-    window.addEventListener("keydown", handleKeyPress);
-    return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [gameState]);
+    window.addEventListener("keydown", preventArrowScroll);
+    return () => window.removeEventListener("keydown", preventArrowScroll);
+  }, []);
 
   // Submit score when game ends
-  const handleGameEnd = (points) => {
+  const handleGameEnd = async (points) => {
     setGameState("ended");
     setCurrentScore(points);
     if (onScoreUpdate) {
-      onScoreUpdate(points);
+      try {
+        await onScoreUpdate(points);
+        console.log("Score submitted successfully:", points);
+      } catch (error) {
+        console.error("Failed to submit score:", error);
+      }
     }
   };
 
@@ -90,6 +98,7 @@ const TetrisGame = ({ onScoreUpdate }) => {
                     <p>Final Score: {points}</p>
                     <button
                       onClick={() => {
+                        handleGameEnd(points);
                         controller.restart();
                         setGameState("playing");
                       }}

@@ -4,7 +4,6 @@ import { getGameImage } from "../utils/gameImages";
 import API_URLS from "../utils/apiUrls";
 import { getAvatarImage } from "../utils/avatarUtils";
 import { apiService } from "../utils/apiService";
-
 import "./styles/Leaderboard.css";
 
 const SCORES_PER_PAGE = 10;
@@ -44,14 +43,20 @@ const Leaderboard = () => {
   }, [selectedGame]);
 
   // Fetch scores
+  // Fetch scores when selected game changes
   useEffect(() => {
     const fetchScores = async () => {
       try {
         setIsLoading(true);
         const response = await fetch(`${API_URLS.SCORES}/game/${selectedGame}`);
-        if (!response.ok) throw new Error("Failed to fetch scores");
+        if (!response.ok) {
+          throw new Error("Failed to fetch scores");
+        }
         const data = await response.json();
-        setAllScores(data);
+
+        // Sort scores by highest first
+        const sortedScores = data.sort((a, b) => b.score - a.score);
+        setAllScores(sortedScores);
       } catch (error) {
         console.error("Error fetching scores:", error);
         setError("Failed to load scores");
@@ -60,7 +65,13 @@ const Leaderboard = () => {
       }
     };
 
+    // Fetch scores immediately when game changes
     fetchScores();
+
+    // Set up polling to refresh scores periodically
+    const intervalId = setInterval(fetchScores, 30000); // Refresh every 30 seconds
+
+    return () => clearInterval(intervalId);
   }, [selectedGame]);
 
   // Update displayed scores
@@ -133,6 +144,21 @@ const Leaderboard = () => {
     );
   }
 
+  //Refresh
+  const refreshScores = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch(`${API_URLS.SCORES}/game/${selectedGame}`);
+      if (!response.ok) throw new Error("Failed to fetch scores");
+      const data = await response.json();
+      setAllScores(data.sort((a, b) => b.score - a.score));
+    } catch (error) {
+      console.error("Error refreshing scores:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Calculate pagination values
   const startRank = (currentPage - 1) * SCORES_PER_PAGE + 1;
   const maxPages = Math.max(1, Math.ceil(allScores.length / SCORES_PER_PAGE));
@@ -142,6 +168,13 @@ const Leaderboard = () => {
       <div className="leaderboard-container">
         {/* Left Panel - Scores */}
         <div className="scores-panel">
+          <div className="scores-header">
+            <h2>Top 100 HighScores</h2>
+            <button onClick={refreshScores} className="refresh-button">
+              Refresh Scores
+            </button>
+          </div>
+
           <div className="game-selector">
             <select
               value={selectedGame}
