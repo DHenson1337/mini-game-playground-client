@@ -3,36 +3,30 @@ import { useNavigate } from "react-router";
 import { getGameImage } from "../utils/gameImages";
 import API_URLS from "../utils/apiUrls";
 import { getAvatarImage } from "../utils/avatarUtils";
+import { apiService } from "../utils/apiService";
 import "./styles/Leaderboard.css";
 
-// Constants for pagination
 const SCORES_PER_PAGE = 10;
-const MAX_SCORES = 100;
 
 const Leaderboard = () => {
   const navigate = useNavigate();
-
-  // State Management
-  const [selectedGame, setSelectedGame] = useState("apple-catcher");
+  const [selectedGame, setSelectedGame] = useState("tetris-classic");
   const [allScores, setAllScores] = useState([]);
   const [displayedScores, setDisplayedScores] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [games, setGames] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedGameTitle, setSelectedGameTitle] = useState("Apple Catcher");
+  const [selectedGameTitle, setSelectedGameTitle] = useState("Tetris Classic");
 
-  // Fetch available games on component mount
+  // Fetch games
   useEffect(() => {
     const fetchGames = async () => {
       try {
-        const response = await fetch(API_URLS.GAMES);
-        if (!response.ok) throw new Error("Failed to fetch games");
-        const data = await response.json();
-        const enabledGames = data.filter((game) => game.enabled);
+        const data = await apiService.fetchGames();
+        const enabledGames = (data.games || []).filter((game) => game.enabled);
         setGames(enabledGames);
 
-        // Set initial game title
         const initialGame = enabledGames.find(
           (game) => game.gameId === selectedGame
         );
@@ -46,44 +40,57 @@ const Leaderboard = () => {
     };
 
     fetchGames();
-  }, []);
+  }, [selectedGame]);
 
-  // Update displayed scores when page changes or scores update
+  // Fetch scores
+  useEffect(() => {
+    const fetchScores = async () => {
+      try {
+        setIsLoading(true);
+        const response = await fetch(`${API_URLS.SCORES}/game/${selectedGame}`);
+        if (!response.ok) throw new Error("Failed to fetch scores");
+        const data = await response.json();
+        setAllScores(data);
+      } catch (error) {
+        console.error("Error fetching scores:", error);
+        setError("Failed to load scores");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchScores();
+  }, [selectedGame]);
+
+  // Update displayed scores
   useEffect(() => {
     const startIndex = (currentPage - 1) * SCORES_PER_PAGE;
     const endIndex = startIndex + SCORES_PER_PAGE;
     setDisplayedScores(allScores.slice(startIndex, endIndex));
   }, [currentPage, allScores]);
 
-  // Fetch leaderboard data when selected game changes
-  useEffect(() => {
-    const fetchLeaderboard = async () => {
-      setIsLoading(true);
-      try {
-        const response = await fetch(`${API_URLS.SCORES}/game/${selectedGame}`);
-        if (!response.ok) throw new Error("Failed to fetch leaderboard");
-        const data = await response.json();
+  //Tetris Game Handler
+  const handleGameEnd = async (points) => {
+    setGameState("ended");
+    setCurrentScore(points);
 
-        // Filter out scores with missing user data
-        const validScores = data.filter(
-          (score) =>
-            score.userId && score.userId.username && score.userId.avatar
-        );
-        setAllScores(validScores);
-        setCurrentPage(1); // Reset to first page when changing games
-        setError(null);
-      } catch (error) {
-        setError("Failed to load leaderboard");
-        console.error("Error fetching leaderboard:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    try {
+      await apiService.submitScore({
+        username: userData.username, // Make sure userData is available
+        gameId: "tetris-classic",
+        score: points,
+      });
 
-    if (selectedGame) {
-      fetchLeaderboard();
+      // Optionally refresh leaderboard
+      // You could emit a Socket.IO event here to update other users
+    } catch (error) {
+      console.error("Failed to submit score:", error);
+      // Handle error (show message to user)
     }
-  }, [selectedGame]);
+  };
+
+  // Fetch leaderboard data when selected game changes
+  // In Leaderboard.jsx
 
   // Handle game selection change
   const handleGameChange = (e) => {

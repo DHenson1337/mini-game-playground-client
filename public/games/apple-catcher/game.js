@@ -23,6 +23,14 @@ class GameScene extends Phaser.Scene {
     this.cursor = null; // Keyboard input
     this.playerSpeed = baseSpeedDown + 130; // Player movement speed
 
+    // Try-catch for localStorage access
+    let savedHighScore = 0;
+    try {
+      savedHighScore = localStorage.getItem("appleHighScore") || 0;
+    } catch (e) {
+      console.log("Could not access localStorage");
+    }
+
     // Score system
     this.points = 0;
     this.textScore = null;
@@ -67,9 +75,7 @@ class GameScene extends Phaser.Scene {
     };
 
     // Bind methods to maintain proper 'this' context
-    this.handleKeyboardControls = this.handleKeyboardControls.bind(this);
-    this.targetHit = this.targetHit.bind(this);
-    this.gameOver = this.gameOver.bind(this);
+    this.highScore = savedHighScore;
   }
 
   /**
@@ -107,8 +113,8 @@ class GameScene extends Phaser.Scene {
    * Create and initialize all game elements
    */
   create() {
-    // Start in paused state until player clicks start
-    // this.scene.pause();
+    // Set initial game state first
+    this.scene.pause();
 
     // Initialize all game systems
     this.setupAudio();
@@ -122,6 +128,47 @@ class GameScene extends Phaser.Scene {
 
     // Initialize first apple
     this.spawnApple();
+
+    // Use arrow function to maintain 'this' binding
+    this.game.events.on("startGame", () => {
+      console.log("Starting game...");
+
+      // Reset game state
+      this.points = 0;
+      this.textScore.setText("Score: 0");
+      this.currentSpeed = baseSpeedDown;
+
+      // Reset physics
+      this.physics.world.resume();
+      this.physics.world.gravity.y = this.currentSpeed;
+
+      // Reset apple
+      this.target.setVelocity(0, 0);
+      this.target.setY(0);
+      this.target.setX(this.getRandomX());
+
+      // Start timer
+      this.timedEvent = this.time.delayedCall(
+        45000,
+        () => this.gameOver(),
+        [],
+        this
+      );
+
+      // Start audio
+      if (this.bgMusic && !this.bgMusic.isPlaying) {
+        this.bgMusic.play();
+      }
+
+      // Resume scene and set initial velocity
+      this.scene.resume();
+      this.target.setVelocityY(this.currentSpeed);
+
+      console.log("Game started with physics:", {
+        gravity: this.physics.world.gravity.y,
+        velocity: this.target.body.velocity.y,
+      });
+    });
   }
 
   /**
@@ -276,7 +323,7 @@ class GameScene extends Phaser.Scene {
     );
 
     // Game timer (45 seconds)
-    this.timedEvent = this.time.delayedCall(45000, this.gameOver, [], this);
+    // this.timedEvent = this.time.delayedCall(45000, this.gameOver, [], this);
   }
 
   /**
@@ -303,11 +350,22 @@ class GameScene extends Phaser.Scene {
    * Game update loop
    */
   update() {
+    // Use scene state instead of gameState
+    if (this.scene.isPaused()) return;
+
+    // Force gravity if it's not active
+    if (this.target.body.velocity.y === 0 && !this.scene.isPaused()) {
+      this.target.setVelocityY(this.currentSpeed);
+      console.log("Reapplying velocity in update");
+    }
+
     // Update timer display
-    this.remainingTime = this.timedEvent.getRemainingSeconds();
-    this.textTime.setText(
-      `Remaining Time: ${Math.round(this.remainingTime).toString()}`
-    );
+    if (this.timedEvent) {
+      this.remainingTime = this.timedEvent.getRemainingSeconds();
+      this.textTime.setText(
+        `Remaining Time: ${Math.round(this.remainingTime).toString()}`
+      );
+    }
 
     // Reset apple if it falls off screen
     if (this.target.y >= sizes.height) {
@@ -324,24 +382,29 @@ class GameScene extends Phaser.Scene {
 
   /**
    * Spawn a new apple with random type
-   */
-  spawnApple() {
+   */ spawnApple() {
     const rand = Math.random();
     let type;
 
-    // Determine apple type based on probability
     if (rand < 0.15) {
-      type = "golden"; // 15% chance for golden apple
+      type = "golden";
     } else if (rand < 0.35) {
-      type = "rotten"; // 20% chance for rotten apple
+      type = "rotten";
     } else {
-      type = "normal"; // 65% chance for normal apple
+      type = "normal";
     }
 
     const appleConfig = this.appleTypes[type];
-    this.target.setTexture(appleConfig.key);
 
-    // Configure apple size and hitbox based on type
+    // Reset apple position and physics
+    this.target.setVelocity(0, 0);
+    this.target.setAcceleration(0, 0);
+    this.target.setY(0);
+    this.target.setX(this.getRandomX());
+    this.target.setTexture(appleConfig.key);
+    this.target.appleType = type;
+
+    // Set apple size based on type
     if (type === "golden") {
       this.target.setScale(0.01);
       this.target.body.setSize(780, 780);
@@ -355,10 +418,12 @@ class GameScene extends Phaser.Scene {
       this.target.body.setSize(39, 39);
     }
 
-    this.target.appleType = type;
-    this.target.setMaxVelocity(0, appleConfig.speed);
+    // Directly set velocity instead of using gravity
+    if (!this.scene.isPaused()) {
+      this.target.setVelocityY(this.currentSpeed);
+      console.log("Apple spawned with velocity:", this.target.body.velocity.y);
+    }
   }
-
   /**
    * Handle keyboard controls for player movement
    */
@@ -426,6 +491,10 @@ class GameScene extends Phaser.Scene {
    * Handle game over state
    */
   gameOver() {
+    // Use scene pause instead of gameState
+    this.scene.pause();
+    this.physics.pause();
+
     // Stop background music
     if (this.bgMusic) {
       this.bgMusic.stop();
@@ -446,12 +515,10 @@ class GameScene extends Phaser.Scene {
 
     // Submit score and cleanup after delay
     this.time.delayedCall(1500, () => {
-      // Submit score to React component
       if (this.game.onScoreSubmit) {
         this.game.onScoreSubmit(this.points);
       }
 
-      // Notify React component of game end
       const gameEndEvent = new CustomEvent("gameEnd", {
         detail: {
           score: this.points,
@@ -461,7 +528,6 @@ class GameScene extends Phaser.Scene {
       document.dispatchEvent(gameEndEvent);
     });
   }
-
   /**
    * Clean up resources when scene is shut down
    */
@@ -496,16 +562,17 @@ class GameScene extends Phaser.Scene {
     this.input.off("pointerdown");
     this.input.off("pointermove");
     this.input.off("pointerup");
+    this.game.events.off("startGame");
   }
 }
 
 /**
  * Wrapper class for React integration
- */
-class AppleCatcherGame {
+ */ class AppleCatcherGame {
   constructor(config) {
     this.config = config;
     this.game = null;
+    this.scene = null; // Add this to track the scene
     this.init();
   }
 
@@ -520,28 +587,68 @@ class AppleCatcherGame {
       physics: {
         default: "arcade",
         arcade: {
-          gravity: { y: baseSpeedDown },
+          gravity: { y: 0 },
           debug: false,
         },
       },
       scene: GameScene,
     };
 
-    this.game = new Phaser.Game(gameConfig);
-    this.game.onScoreSubmit = this.config.onScoreSubmit;
+    try {
+      this.game = new Phaser.Game(gameConfig);
+      this.game.onScoreSubmit = this.config.onScoreSubmit;
+
+      // Wait for scene to be created
+      this.game.events.once("ready", () => {
+        this.scene = this.game.scene.getScene("scene-game");
+        console.log("Game scene ready:", this.scene);
+      });
+
+      console.log("Game initialized successfully");
+    } catch (error) {
+      console.error("Failed to initialize game:", error);
+    }
+  }
+
+  async startGame() {
+    try {
+      // Try to get scene if not already stored
+      if (!this.scene) {
+        this.scene = this.game.scene.getScene("scene-game");
+      }
+
+      // Wait for scene to be ready
+      if (!this.scene) {
+        await new Promise((resolve) => {
+          const checkScene = setInterval(() => {
+            this.scene = this.game.scene.getScene("scene-game");
+            if (this.scene) {
+              clearInterval(checkScene);
+              resolve();
+            }
+          }, 100);
+        });
+      }
+
+      console.log("Starting game with scene:", this.scene);
+      this.game.events.emit("startGame");
+    } catch (error) {
+      console.error("Error starting game:", error);
+    }
   }
 
   destroy() {
     if (this.game) {
-      const scene = this.game.scene.getScene("scene-game");
-      if (scene) {
-        scene.shutdown();
+      try {
+        this.game.destroy(true);
+        this.game = null;
+        this.scene = null; // Clear scene reference
+        console.log("Game destroyed successfully");
+      } catch (error) {
+        console.error("Error destroying game:", error);
       }
-      this.game.destroy(true);
-      this.game = null;
     }
   }
 }
-
 // Make available globally
 window.AppleCatcherGame = AppleCatcherGame;
