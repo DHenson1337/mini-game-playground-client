@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useCallback } from "react";
+// src/pages/GameView.jsx
+
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate, useParams } from "react-router";
 import { getUserFromSession } from "../utils/userSession";
 import TetrisGame from "../components/games/TetrisGame";
@@ -11,45 +13,58 @@ const GameView = () => {
   const [game, setGame] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const userData = getUserFromSession();
 
-  // Get user data and add debug logging
-  console.log("GameView - Current user data:", userData);
+  // Get user data once and memoize it
+  const userData = useMemo(() => getUserFromSession(), []);
 
+  // Fetch game data
   useEffect(() => {
-    //Check for user Data
     if (!userData) {
-      console.log("No user data found, redirecting to landing page");
+      console.log("No user data, redirecting to landing page");
       navigate("/");
       return;
     }
+
+    let isSubscribed = true;
 
     const fetchGame = async () => {
       try {
         setIsLoading(true);
         const gameData = await apiService.fetchGame(gameId);
-        setGame(gameData);
-        setError(null);
-      } catch (error) {
-        console.error("Error fetching game:", error);
-        setError(error.message);
+        if (isSubscribed) {
+          setGame(gameData);
+          setError(null);
+        }
+      } catch (err) {
+        if (isSubscribed) {
+          console.error("Error fetching game:", err);
+          setError(err.message);
+        }
       } finally {
-        setIsLoading(false);
+        if (isSubscribed) {
+          setIsLoading(false);
+        }
       }
     };
 
     fetchGame();
+
+    // Cleanup function
+    return () => {
+      isSubscribed = false;
+    };
   }, [gameId, navigate, userData]);
 
+  // Memoize the score submission handler
   const handleScoreSubmit = useCallback(
     async (score) => {
-      if (!userData || !gameId) {
+      if (!userData?.username || !gameId) {
         console.error("Missing user data or game ID");
         return;
       }
 
       try {
-        console.log("Submitting score with data:", {
+        console.log("Submitting score:", {
           username: userData.username,
           gameId,
           score,
@@ -61,14 +76,14 @@ const GameView = () => {
           score,
         });
 
-        console.log("Score submission response:", response);
-        return response; // Return the response so TetrisGame can update its state
+        console.log("Score submission successful:", response);
+        return response;
       } catch (error) {
         console.error("Score submission error:", error);
-        throw error; // Rethrow so TetrisGame can handle the error
+        throw error;
       }
     },
-    [userData, gameId]
+    [userData?.username, gameId]
   );
 
   const handleReturnToGames = useCallback(() => {

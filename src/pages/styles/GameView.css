@@ -1,79 +1,21 @@
 .game-view {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   min-height: 100vh;
   background-color: var(--background);
-  padding: var(--spacing-lg);
+}
+
+.game-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md) var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
 }
 
 .game-container {
-  position: relative;
-  width: 500px;
-  height: 500px;
-}
-
-#gameCanvas {
   width: 100%;
-  height: 100%;
-  border: 2px solid var(--primary);
-  border-radius: var(--border-radius);
-}
-
-.game-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
   display: flex;
   justify-content: center;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.85);
-  border-radius: var(--border-radius);
-  z-index: 1000;
-}
-
-.game-menu {
-  text-align: center;
-  padding: var(--spacing-lg);
-  color: var(--text);
-}
-
-.game-menu h1,
-.game-menu h2 {
-  margin-bottom: var(--spacing-md);
-  color: var(--primary);
-}
-
-.game-menu p {
-  margin-bottom: var(--spacing-sm);
-}
-
-.game-button {
-  margin-top: var(--spacing-md);
-  padding: var(--spacing-md) var(--spacing-lg);
-  background-color: var(--primary);
-  color: var(--text);
-  border: none;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  font-size: 1.1rem;
-  transition: opacity var(--transition-speed);
-}
-
-.game-button:hover {
-  opacity: 0.9;
-}
-
-.result-text {
-  font-size: 1.5rem;
-  margin: var(--spacing-md) 0;
-}
-
-.score-text {
-  font-size: 1.2rem;
-  color: var(--primary);
 }
 
 /* Loading State */
@@ -95,20 +37,35 @@
   animation: spin 1s linear infinite;
 }
 
+.game-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: var(--spacing-md);
+}
+
+.return-button {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: transparent;
+  border: 1px solid var(--text);
+  color: var(--text);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.return-button:hover {
+  background: var(--text);
+  color: var(--background);
+}
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);
   }
   100% {
     transform: rotate(360deg);
-  }
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-  .game-container {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 1;
   }
 }
