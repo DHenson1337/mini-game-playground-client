@@ -1,10 +1,12 @@
 .tetris-container {
   width: 100%;
-  max-width: 1000px;
+  max-width: 1000px; /* Keep original width */
   margin: 0 auto;
   padding: var(--spacing-lg);
   background-color: var(--background);
   border-radius: var(--border-radius);
+  transform: scale(0.8); /* Scale down the entire container */
+  transform-origin: top center;
 }
 
 .game-header {
