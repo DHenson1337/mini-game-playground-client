@@ -1,23 +1,16 @@
+// components/layout/Navbar.jsx
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import {
-  getUserFromSession,
-  removeUserFromSession,
-} from "../../utils/userSession";
+import { useUser } from "../../context/UserContext";
 import "./styles/Navbar.css";
 import { AVATAR_IMAGES, getAvatarImage } from "../../utils/avatarUtils";
-// Import avatar images
+import authService from "../../services/authService";
 
 const Navbar = () => {
   const [isAudioEnabled, setIsAudioEnabled] = useState(true);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const user = getUserFromSession();
-    setUserData(user);
-  }, []);
+  const { user, logout } = useUser();
 
   const toggleAudio = () => {
     setIsAudioEnabled(!isAudioEnabled);
@@ -27,9 +20,14 @@ const Navbar = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const handleLogout = () => {
-    removeUserFromSession();
-    navigate("/");
+  const handleLogout = async () => {
+    try {
+      await authService.logout();
+      await logout(); // Clear user context
+      navigate("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   const handleNavigation = (path, e) => {
@@ -106,40 +104,34 @@ const Navbar = () => {
 
       {/* Right side - User Menu */}
       <div className="nav-right">
-        <div className="user-menu">
-          {userData && (
-            <>
-              {/* Avatar Image */}
-              <img
-                src={getAvatarImage(userData.avatar)}
-                alt={`${userData.username}'s Avatar`}
-                className="user-avatar"
-                onClick={toggleDropdown}
-              />
-              {isDropdownOpen && (
-                <div className="dropdown-menu">
-                  <div className="dropdown-header">
-                    {/* Avatar Image */}
-                    <img
-                      src={getAvatarImage(userData.avatar)}
-                      alt={`${userData.username}'s Avatar`}
-                      className="dropdown-avatar"
-                    />
-                    <span className="dropdown-username">
-                      {userData.username}
-                    </span>
-                  </div>
-                  <a href="#" onClick={(e) => handleNavigation("/profile", e)}>
-                    Change Avatar
-                  </a>
-                  <button onClick={handleLogout} className="logout-button">
-                    Logout
-                  </button>
+        {user && (
+          <div className="user-menu">
+            <img
+              src={getAvatarImage(user.avatar)}
+              alt={`${user.username}'s Avatar`}
+              className="user-avatar"
+              onClick={toggleDropdown}
+            />
+            {isDropdownOpen && (
+              <div className="dropdown-menu">
+                <div className="dropdown-header">
+                  <img
+                    src={getAvatarImage(user.avatar)}
+                    alt={`${user.username}'s Avatar`}
+                    className="dropdown-avatar"
+                  />
+                  <span className="dropdown-username">{user.username}</span>
                 </div>
-              )}
-            </>
-          )}
-        </div>
+                <a href="#" onClick={(e) => handleNavigation("/profile", e)}>
+                  Change Avatar
+                </a>
+                <button onClick={handleLogout} className="logout-button">
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </nav>
   );

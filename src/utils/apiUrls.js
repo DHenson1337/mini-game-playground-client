@@ -1,14 +1,20 @@
-//My BackEnd API PULLS
+const BASE_URL = "http://localhost:5000/api";
 
 const API_URLS = {
-  GAMES: "http://localhost:5000/api/games",
-  USERS: "http://localhost:5000/api/users",
-  SCORES: "http://localhost:5000/api/scores",
+  GAMES: `${BASE_URL}/games`,
+  USERS: `${BASE_URL}/users`,
+  SCORES: `${BASE_URL}/scores`,
+  AUTH: `${BASE_URL}/auth`,
+};
 
-  //Todo
-  // Individual score endpoints :
-  // - ${API_URLS.SCORES}/game/:gameId (for game leaderboard)
-  // - ${API_URLS.SCORES}/user/:username (for user scores)
+// Export individual endpoints for easier access
+export const AUTH_ENDPOINTS = {
+  LOGIN: `${API_URLS.AUTH}/login`,
+  SIGNUP: `${API_URLS.AUTH}/signup`,
+  GUEST: `${API_URLS.AUTH}/guest`,
+  LOGOUT: `${API_URLS.AUTH}/logout`,
+  CHECK: `${API_URLS.AUTH}/check`,
+  REFRESH: `${API_URLS.AUTH}/refresh-token`,
 };
 
 export default API_URLS;

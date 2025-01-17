@@ -1,210 +1,200 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
-import "./styles/LandingPage.css";
-import { saveUserToSession } from "../utils/userSession";
-import API_URLS from "../utils/apiUrls";
+import { useNavigate, useLocation } from "react-router";
+import { useUser } from "../context/UserContext";
+import authService from "../services/authService";
 import SuccessMessage from "../components/SuccessMessage";
+import { AVATARS } from "../utils/avatarUtils";
+import "./styles/LandingPage.css";
 
-//Avatar (Profile Pics) Imports
-import cowledIcon from "../assets/avatars/cowled.svg";
-import femaleVampireIcon from "../assets/avatars/femaleVampire.svg";
-import hoodIcon from "../assets/avatars/hood.svg";
-import overlordIcon from "../assets/avatars/overlord.svg";
-import quickManIcon from "../assets/avatars/quickMan.svg";
-import visoredHelmIcon from "../assets/avatars/visoredHelm.svg";
-import wizardIcon from "../assets/avatars/wizard.svg";
-import womanElfIcon from "../assets/avatars/womanElf.svg";
-import witchIcon from "../assets/avatars/witch.svg";
-
-//Avatar section
-const AVATARS = [
-  {
-    id: "cowled",
-    name: "Cowled",
-    image: cowledIcon,
-    // To do figure out why adding a type causes this to hover across the grid
-  },
-
-  {
-    id: "hood",
-    name: "Hood",
-    image: hoodIcon,
-    type: "stealth",
-  },
-  {
-    id: "wizard",
-    name: "Wizard",
-    image: wizardIcon,
-    type: "magic",
-  },
-
-  {
-    id: "femaleVampire",
-    name: "Female Vampire",
-    image: femaleVampireIcon,
-    type: "evil",
-  },
-
-  {
-    id: "femaleElf",
-    name: "Female Elf",
-    image: womanElfIcon,
-    type: "nature",
-  },
-  {
-    id: "witch",
-    name: "Witch",
-    image: witchIcon,
-    type: "magic",
-  },
-  {
-    id: "overlord",
-    name: "Overlord",
-    image: overlordIcon,
-    type: "evil",
-  },
-
-  {
-    id: "visoredHelm",
-    name: "Visored Helm",
-    image: visoredHelmIcon,
-    type: "warrior",
-  },
-  {
-    id: "quickMan",
-    name: "Quick Man",
-    image: quickManIcon,
-    type: "warrior",
-  },
-];
-
-/* 
-Landing Page Component
-Handles user registration and avater selection before entering the game platform
-*/
-
-function LandingPage() {
-  //States for form inputs
-  const [username, setUsername] = useState("");
-  const [usernameError, setUsernameError] = useState("");
-  const [selectedAvatar, setSelectedAvatar] = useState("");
+const LandingPage = () => {
+  const navigate = useNavigate();
+  const { login } = useUser();
+  const [activeTab, setActiveTab] = useState("login");
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+    confirmPassword: "",
+    avatar: "",
+    rememberMe: false,
+  });
+  const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const navigate = useNavigate();
 
-  /**
-   * Handle form submission
-   * Validates inputs and creates new user
-   * @param {Event} e - Form submission event
-   */
+  // Form validation
+  const validateForm = () => {
+    const newErrors = {};
 
-  // Avatar (the not so last codebender) selection handler
-  const handleAvatarSelect = (avatarId) => {
-    setSelectedAvatar(avatarId);
-  };
-
-  //Username validation function
-  const validateusername = (value) => {
-    //Sets user name character limit
-    if (value.length < 3) {
-      return "NickName must be at least 3 characters";
+    if (formData.username.length < 3) {
+      newErrors.username = "Username must be at least 3 characters";
     }
-    if (value.length > 12) {
-      return "NickName cannot exceed 12 characters";
+    if (formData.username.length > 12) {
+      newErrors.username = "Username cannot exceed 12 characters";
     }
-    //Character Checker
-    if (!/^[a-zA-Z0-9_]+$/.test(value)) {
-      return "NickName can only contain letters, numbers, and underscores";
+    if (!/^[a-zA-Z0-9_]+$/.test(formData.username)) {
+      newErrors.username =
+        "Username can only contain letters, numbers, and underscores";
     }
-    return "";
-  };
 
-  //Handle username change with validation
-  const handleUsernameChange = (e) => {
-    const value = e.target.value;
-    setUsername(value);
-    setUsernameError(validateusername(value));
-  };
-
-  //Form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true); // Start Loading State
-    const error = validateusername(username);
-    if (error) {
-      setUsernameError(error);
-      setIsLoading(false);
-      return;
-    }
-    if (!selectedAvatar) {
-      //Todo Avatar validation...(someday)
-      setIsLoading(false);
-      return;
-    }
-    try {
-      const response = await fetch(API_URLS.USERS, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username,
-          avatar: selectedAvatar, // Saving the avatar ID
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to create user");
+    if (activeTab === "signup") {
+      if (!formData.password) {
+        newErrors.password = "Password is required";
+      } else if (formData.password.length < 6) {
+        newErrors.password = "Password must be at least 6 characters";
       }
 
-      const userData = await response.json();
+      if (formData.password !== formData.confirmPassword) {
+        newErrors.confirmPassword = "Passwords do not match";
+      }
+    }
 
-      // Save user data to session
-      saveUserToSession(userData);
+    if (!formData.avatar && activeTab === "signup") {
+      newErrors.avatar = "Please select an avatar";
+    }
 
-      // Show success message
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    setIsLoading(true);
+    try {
+      let authResponse;
+      if (activeTab === "login") {
+        authResponse = await authService.login(
+          formData.username,
+          formData.password,
+          formData.rememberMe
+        );
+      } else {
+        authResponse = await authService.signup({
+          username: formData.username,
+          password: formData.password,
+          avatar: formData.avatar,
+          rememberMe: formData.rememberMe,
+        });
+      }
+
+      // Update global user state
+      await login(authResponse.user);
+
       setShowSuccess(true);
 
-      //Navigate after success message closes
-      setTimeout(() => {
-        navigate("/games");
-      }, 3000);
+      // Navigate to the attempted page or default to /games
+      const from = location.state?.from?.pathname || "/games";
+      setTimeout(() => navigate(from), 3000);
     } catch (error) {
-      console.error("Failed to create user:", error);
-      setUsernameError(error.message);
+      setErrors({ submit: error.message });
     } finally {
-      setIsLoading(false); //Ends loading regardless of outcome
+      setIsLoading(false);
     }
   };
-  return (
-    <>
-      <div className="landing-container">
-        <div className="landing-content">
-          <h1>Welcome to Mini Game Playground</h1>
-          <p>Enter a NickName and select an avatar to begin</p>
-          {/* User input */}
-          <form onSubmit={handleSubmit} className="landing-form">
-            <div className="form-group">
-              <label htmlFor="username">NickName:</label>
-              <input
-                type="text"
-                id="username"
-                className={`form-input ${usernameError ? "input-error" : ""}`}
-                value={username}
-                onChange={handleUsernameChange}
-                placeholder="Enter NickName (3-12 characters)"
-                maxLength={12}
-              />
-              {usernameError && (
-                <span className="error-message">{usernameError}</span>
-              )}
-            </div>
 
-            {/* Avatar selection grid */}
-            <div className="form-group">
-              <label>
-                Select Avatar:
+  const handleGuestAccess = async () => {
+    setIsLoading(true);
+    try {
+      const response = await authService.guestLogin(
+        formData.avatar || "cowled"
+      );
+      await login(response.user);
+      setShowSuccess(true);
+      setTimeout(() => navigate("/games"), 3000);
+    } catch (error) {
+      setErrors({ submit: error.message });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="landing-container">
+      <div className="landing-content">
+        <h1>Welcome to Mini Game Playground</h1>
+
+        {/* Auth Tabs */}
+        <div className="auth-tabs">
+          <button
+            className={`tab-button ${activeTab === "login" ? "active" : ""}`}
+            onClick={() => setActiveTab("login")}
+          >
+            Login
+          </button>
+          <button
+            className={`tab-button ${activeTab === "signup" ? "active" : ""}`}
+            onClick={() => setActiveTab("signup")}
+          >
+            Sign Up
+          </button>
+        </div>
+
+        {/* Auth Form */}
+        <form onSubmit={handleSubmit} className="landing-form">
+          <div className="form-group">
+            <label htmlFor="username">Username:</label>
+            <input
+              type="text"
+              id="username"
+              className={`form-input ${errors.username ? "input-error" : ""}`}
+              value={formData.username}
+              onChange={(e) =>
+                setFormData({ ...formData, username: e.target.value })
+              }
+              placeholder="Enter username (3-12 characters)"
+              maxLength={12}
+            />
+            {errors.username && (
+              <span className="error-message">{errors.username}</span>
+            )}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="password">Password:</label>
+            <input
+              type="password"
+              id="password"
+              className={`form-input ${errors.password ? "input-error" : ""}`}
+              value={formData.password}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
+              placeholder="Enter password"
+            />
+            {errors.password && (
+              <span className="error-message">{errors.password}</span>
+            )}
+          </div>
+
+          {activeTab === "signup" && (
+            <>
+              <div className="form-group">
+                <label htmlFor="confirmPassword">Confirm Password:</label>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  className={`form-input ${
+                    errors.confirmPassword ? "input-error" : ""
+                  }`}
+                  value={formData.confirmPassword}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      confirmPassword: e.target.value,
+                    })
+                  }
+                  placeholder="Confirm your password"
+                />
+                {errors.confirmPassword && (
+                  <span className="error-message">
+                    {errors.confirmPassword}
+                  </span>
+                )}
+              </div>
+
+              <div className="form-group">
+                <label>Select Avatar:</label>
                 <div className="avatar-grid">
                   {AVATARS.map((avatar) => (
                     <button
@@ -212,9 +202,11 @@ function LandingPage() {
                       type="button"
                       data-type={avatar.type}
                       className={`avatar-button ${
-                        selectedAvatar === avatar.id ? "selected" : ""
+                        formData.avatar === avatar.id ? "selected" : ""
                       }`}
-                      onClick={() => handleAvatarSelect(avatar.id)}
+                      onClick={() =>
+                        setFormData({ ...formData, avatar: avatar.id })
+                      }
                     >
                       <img
                         src={avatar.image}
@@ -224,39 +216,65 @@ function LandingPage() {
                     </button>
                   ))}
                 </div>
-              </label>
-            </div>
-            {/* Form Submission */}
-            <div className="form-group" style={{ position: "relative" }}>
-              <button
-                type="submit"
-                className={`submit-button ${isLoading ? "loading" : ""}`}
-                disabled={
-                  !!usernameError || !username || !selectedAvatar || isLoading
+                {errors.avatar && (
+                  <span className="error-message">{errors.avatar}</span>
+                )}
+              </div>
+            </>
+          )}
+
+          <div className="form-group remember-me">
+            <label>
+              <input
+                type="checkbox"
+                checked={formData.rememberMe}
+                onChange={(e) =>
+                  setFormData({ ...formData, rememberMe: e.target.checked })
                 }
-              >
-                {isLoading ? "Creating Account..." : "Start Playing"}
-              </button>
-              {isLoading && (
-                <div className="form-loading-overlay">
-                  <span style={{ color: "var(--text)" }}>
-                    Setting up your profile...
-                  </span>
-                </div>
-              )}
-            </div>
-          </form>
-        </div>
+              />
+              Remember me
+            </label>
+          </div>
+
+          {errors.submit && (
+            <div className="error-message submit-error">{errors.submit}</div>
+          )}
+
+          <button
+            type="submit"
+            className={`submit-button ${isLoading ? "loading" : ""}`}
+            disabled={isLoading}
+          >
+            {isLoading
+              ? "Please wait..."
+              : activeTab === "login"
+              ? "Login"
+              : "Sign Up"}
+          </button>
+
+          <button
+            type="button"
+            className="guest-button"
+            onClick={handleGuestAccess}
+            disabled={isLoading}
+          >
+            Continue as Guest
+          </button>
+        </form>
       </div>
-      {/* SuccesMessage */}
+
       {showSuccess && (
         <SuccessMessage
-          message="Welcome to Mini Game Playground! Enjoy your session!"
+          message={`Welcome to Mini Game Playground! ${
+            activeTab === "login"
+              ? "Welcome back!"
+              : "Account created successfully!"
+          }`}
           onClose={() => setShowSuccess(false)}
         />
       )}
-    </>
+    </div>
   );
-}
+};
 
 export default LandingPage;

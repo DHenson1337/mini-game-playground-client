@@ -1,8 +1,6 @@
-// src/pages/GameView.jsx
-
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useParams } from "react-router";
-import { getUserFromSession } from "../utils/userSession";
+import { useUser } from "../context/UserContext";
 import TetrisGame from "../components/games/TetrisGame";
 import { apiService } from "../utils/apiService";
 import "./styles/GameView.css";
@@ -10,16 +8,14 @@ import "./styles/GameView.css";
 const GameView = () => {
   const navigate = useNavigate();
   const { gameId } = useParams();
+  const { user } = useUser(); // Use the auth context instead of localStorage
   const [game, setGame] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Get user data once and memoize it
-  const userData = useMemo(() => getUserFromSession(), []);
-
   // Fetch game data
   useEffect(() => {
-    if (!userData) {
+    if (!user) {
       console.log("No user data, redirecting to landing page");
       navigate("/");
       return;
@@ -49,29 +45,28 @@ const GameView = () => {
 
     fetchGame();
 
-    // Cleanup function
     return () => {
       isSubscribed = false;
     };
-  }, [gameId, navigate, userData]);
+  }, [gameId, navigate, user]);
 
   // Memoize the score submission handler
   const handleScoreSubmit = useCallback(
     async (score) => {
-      if (!userData?.username || !gameId) {
+      if (!user?.username || !gameId) {
         console.error("Missing user data or game ID");
         return;
       }
 
       try {
         console.log("Submitting score:", {
-          username: userData.username,
+          username: user.username,
           gameId,
           score,
         });
 
         const response = await apiService.submitScore({
-          username: userData.username,
+          username: user.username,
           gameId,
           score,
         });
@@ -83,7 +78,7 @@ const GameView = () => {
         throw error;
       }
     },
-    [userData?.username, gameId]
+    [user?.username, gameId]
   );
 
   const handleReturnToGames = useCallback(() => {
