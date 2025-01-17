@@ -38,3 +38,8 @@ Fix Hover effect bug on landing page grid.
 Clean up landing page to use the avatarUtil
 Fix user Sign in
 Fix Elf Icon not being selected
+
+Tetris Game:
+The MIT License (MIT)
+
+Copyright (c) 2015 Matthew Brandly - https://www.npmjs.com/package/react-tetris?activeTab=code

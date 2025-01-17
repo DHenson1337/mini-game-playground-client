@@ -102,7 +102,6 @@ const Leaderboard = () => {
   };
 
   // Fetch leaderboard data when selected game changes
-  // In Leaderboard.jsx
 
   // Handle game selection change
   const handleGameChange = (e) => {
@@ -203,22 +202,35 @@ const Leaderboard = () => {
             ) : (
               <div className="scores-table">
                 {displayedScores.length > 0 ? (
-                  displayedScores.map((score, index) => (
-                    <div key={score._id || index} className="score-row">
-                      <div className="rank">{startRank + index}</div>
-                      <div className="player-info">
-                        <img
-                          src={getAvatarImage(score.userId.avatar)}
-                          alt={`${score.userId.username}'s avatar`}
-                          className="player-avatar"
-                        />
-                        <span className="username">
-                          {score.userId.username}
-                        </span>
-                      </div>
-                      <div className="score">{score.score}</div>
-                    </div>
-                  ))
+                  displayedScores
+                    .map((score, index) => {
+                      // Skip scores with null userId or missing user data
+                      if (!score.userId) {
+                        return null;
+                      }
+
+                      return (
+                        <div key={score._id || index} className="score-row">
+                          <div className="rank">{startRank + index}</div>
+                          <div className="player-info">
+                            <img
+                              src={getAvatarImage(
+                                score.userId?.avatar || "default"
+                              )} // Add fallback
+                              alt={`${
+                                score.userId?.username || "Deleted User"
+                              }'s avatar`}
+                              className="player-avatar"
+                            />
+                            <span className="username">
+                              {score.userId?.username || "Deleted User"}
+                            </span>
+                          </div>
+                          <div className="score">{score.score}</div>
+                        </div>
+                      );
+                    })
+                    .filter(Boolean) // Remove null entries
                 ) : (
                   <div className="no-scores">No scores available</div>
                 )}

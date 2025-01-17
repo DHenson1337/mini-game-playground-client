@@ -3,20 +3,24 @@
 const USER_KEY = "mgp_user"; // mgp = mini game playground
 
 export const saveUserToSession = (userData) => {
+  console.log("Saving user to session:", userData);
   localStorage.setItem(USER_KEY, JSON.stringify(userData));
 };
 
 export const getUserFromSession = () => {
   const data = localStorage.getItem(USER_KEY);
-  return data ? JSON.parse(data) : null;
+  const userData = data ? JSON.parse(data) : null;
+  console.log("Retrieved user from session:", userData);
+  return userData;
 };
 
-//The Logout button (For good :>)
 export const removeUserFromSession = () => {
+  console.log("Removing user from session");
   localStorage.removeItem(USER_KEY);
 };
 
-//Checks if user is loggedin
 export const isUserLoggedIn = () => {
-  return !!getUserFromSession();
+  const isLoggedIn = !!getUserFromSession();
+  console.log("User logged in status:", isLoggedIn);
+  return isLoggedIn;
 };
