@@ -4,6 +4,7 @@ import { getGameImage } from "../utils/gameImages";
 import API_URLS from "../utils/apiUrls";
 import { getAvatarImage } from "../utils/avatarUtils";
 import { apiService } from "../utils/apiService";
+import socketClient from "../services/socketClient";
 import "./styles/Leaderboard.css";
 
 const SCORES_PER_PAGE = 10;
@@ -18,6 +19,7 @@ const Leaderboard = () => {
   const [games, setGames] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedGameTitle, setSelectedGameTitle] = useState("Tetris Classic");
+  const [lastUpdate, setLastUpdate] = useState(null); // For showing update status
 
   // Fetch games
   useEffect(() => {
@@ -42,8 +44,34 @@ const Leaderboard = () => {
     fetchGames();
   }, [selectedGame]);
 
+  // Socket.IO connection and listeners
+  useEffect(() => {
+    // Connect to Socket.IO
+    socketClient.connect();
+
+    // Join the game room
+    socketClient.joinGame(selectedGame);
+
+    // Listen for score updates
+    socketClient.onScoreUpdate(selectedGame, (data) => {
+      setAllScores((prevScores) => {
+        // Add new score and resort
+        const newScores = [...prevScores, data.score]
+          .sort((a, b) => b.score - a.score)
+          .slice(0, 100); // Keep only top 100
+
+        setLastUpdate(new Date().toLocaleTimeString());
+        return newScores;
+      });
+    });
+
+    // Cleanup on unmount or game change
+    return () => {
+      socketClient.leaveGame(selectedGame);
+    };
+  }, [selectedGame]);
+
   // Fetch scores
-  // Fetch scores when selected game changes
   useEffect(() => {
     const fetchScores = async () => {
       try {
@@ -65,45 +93,16 @@ const Leaderboard = () => {
       }
     };
 
-    // Fetch scores immediately when game changes
     fetchScores();
-
-    // Set up polling to refresh scores periodically
-    const intervalId = setInterval(fetchScores, 30000); // Refresh every 30 seconds
-
-    return () => clearInterval(intervalId);
   }, [selectedGame]);
 
-  // Update displayed scores
+  // Update displayed scores on page change
   useEffect(() => {
     const startIndex = (currentPage - 1) * SCORES_PER_PAGE;
     const endIndex = startIndex + SCORES_PER_PAGE;
     setDisplayedScores(allScores.slice(startIndex, endIndex));
   }, [currentPage, allScores]);
 
-  //Tetris Game Handler
-  const handleGameEnd = async (points) => {
-    setGameState("ended");
-    setCurrentScore(points);
-
-    try {
-      await apiService.submitScore({
-        username: userData.username, // Make sure userData is available
-        gameId: "tetris-classic",
-        score: points,
-      });
-
-      // Optionally refresh leaderboard
-      // You could emit a Socket.IO event here to update other users
-    } catch (error) {
-      console.error("Failed to submit score:", error);
-      // Handle error (show message to user)
-    }
-  };
-
-  // Fetch leaderboard data when selected game changes
-
-  // Handle game selection change
   const handleGameChange = (e) => {
     const gameId = e.target.value;
     setSelectedGame(gameId);
@@ -114,7 +113,6 @@ const Leaderboard = () => {
     setCurrentPage(1);
   };
 
-  // Pagination handlers
   const handlePrevPage = () => {
     setCurrentPage((prev) => Math.max(1, prev - 1));
   };
@@ -132,32 +130,6 @@ const Leaderboard = () => {
     </div>
   );
 
-  // Error state
-  if (error) {
-    return (
-      <div className="leaderboard-error">
-        <h2>Error</h2>
-        <p>{error}</p>
-        <button onClick={() => window.location.reload()}>Retry</button>
-      </div>
-    );
-  }
-
-  //Refresh
-  const refreshScores = async () => {
-    try {
-      setIsLoading(true);
-      const response = await fetch(`${API_URLS.SCORES}/game/${selectedGame}`);
-      if (!response.ok) throw new Error("Failed to fetch scores");
-      const data = await response.json();
-      setAllScores(data.sort((a, b) => b.score - a.score));
-    } catch (error) {
-      console.error("Error refreshing scores:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   // Calculate pagination values
   const startRank = (currentPage - 1) * SCORES_PER_PAGE + 1;
   const maxPages = Math.max(1, Math.ceil(allScores.length / SCORES_PER_PAGE));
@@ -169,9 +141,9 @@ const Leaderboard = () => {
         <div className="scores-panel">
           <div className="scores-header">
             <h2>Top 100 HighScores</h2>
-            <button onClick={refreshScores} className="refresh-button">
-              Refresh Scores
-            </button>
+            {lastUpdate && (
+              <div className="last-update">Last update: {lastUpdate}</div>
+            )}
           </div>
 
           <div className="game-selector">
@@ -189,74 +161,75 @@ const Leaderboard = () => {
           </div>
 
           <div className="scores-list">
-            <h2>Top 100 HighScores</h2>
-            <div className="page-info">
-              Showing {startRank} -{" "}
-              {Math.min(startRank + SCORES_PER_PAGE - 1, allScores.length)} of{" "}
-              {allScores.length}
-            </div>
-
-            {/* Scores Display */}
             {isLoading ? (
               <LoadingSpinner />
             ) : (
-              <div className="scores-table">
-                {displayedScores.length > 0 ? (
-                  displayedScores
-                    .map((score, index) => {
-                      // Skip scores with null userId or missing user data
-                      if (!score.userId) {
-                        return null;
-                      }
+              <>
+                <div className="page-info">
+                  Showing {startRank} -{" "}
+                  {Math.min(startRank + SCORES_PER_PAGE - 1, allScores.length)}{" "}
+                  of {allScores.length}
+                </div>
 
-                      return (
-                        <div key={score._id || index} className="score-row">
-                          <div className="rank">{startRank + index}</div>
-                          <div className="player-info">
-                            <img
-                              src={getAvatarImage(
-                                score.userId?.avatar || "default"
-                              )} // Add fallback
-                              alt={`${
-                                score.userId?.username || "Deleted User"
-                              }'s avatar`}
-                              className="player-avatar"
-                            />
-                            <span className="username">
-                              {score.userId?.username || "Deleted User"}
-                            </span>
+                <div className="scores-table">
+                  {displayedScores.length > 0 ? (
+                    displayedScores
+                      .map((score, index) => {
+                        if (!score.userId) return null;
+
+                        return (
+                          <div
+                            key={score._id || index}
+                            className={`score-row ${
+                              score.isNew ? "new-score" : ""
+                            }`}
+                          >
+                            <div className="rank">{startRank + index}</div>
+                            <div className="player-info">
+                              <img
+                                src={getAvatarImage(
+                                  score.userId?.avatar || "default"
+                                )}
+                                alt={`${
+                                  score.userId?.username || "Deleted User"
+                                }'s avatar`}
+                                className="player-avatar"
+                              />
+                              <span className="username">
+                                {score.userId?.username || "Deleted User"}
+                              </span>
+                            </div>
+                            <div className="score">{score.score}</div>
                           </div>
-                          <div className="score">{score.score}</div>
-                        </div>
-                      );
-                    })
-                    .filter(Boolean) // Remove null entries
-                ) : (
-                  <div className="no-scores">No scores available</div>
-                )}
-              </div>
-            )}
+                        );
+                      })
+                      .filter(Boolean)
+                  ) : (
+                    <div className="no-scores">No scores available</div>
+                  )}
+                </div>
 
-            {/* Pagination Controls */}
-            <div className="pagination">
-              <button
-                onClick={handlePrevPage}
-                disabled={currentPage === 1}
-                className="nav-button prev"
-              >
-                Prev
-              </button>
-              <span className="page-number">
-                Page {currentPage} of {maxPages}
-              </span>
-              <button
-                onClick={handleNextPage}
-                disabled={currentPage >= maxPages}
-                className="nav-button next"
-              >
-                Next
-              </button>
-            </div>
+                <div className="pagination">
+                  <button
+                    onClick={handlePrevPage}
+                    disabled={currentPage === 1}
+                    className="nav-button prev"
+                  >
+                    Prev
+                  </button>
+                  <span className="page-number">
+                    Page {currentPage} of {maxPages}
+                  </span>
+                  <button
+                    onClick={handleNextPage}
+                    disabled={currentPage >= maxPages}
+                    className="nav-button next"
+                  >
+                    Next
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
 

@@ -246,3 +246,40 @@
     transform: translate(-50%, -50%) rotate(360deg);
   }
 }
+
+/* Aditional additions */
+
+.score-row {
+  position: relative;
+  transition: all 0.3s ease-out;
+}
+
+.score-row.new-score {
+  animation: highlightNew 2s ease-out;
+}
+
+.last-update {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: var(--spacing-sm);
+}
+
+@keyframes highlightNew {
+  0% {
+    background-color: rgba(99, 102, 241, 0.2);
+    transform: translateX(-10px);
+  }
+  100% {
+    background-color: transparent;
+    transform: translateX(0);
+  }
+}
+
+/* Optional: Add a smooth transition when scores reorder */
+.scores-table {
+  position: relative;
+}
+
+.score-row {
+  transition: transform 0.3s ease-out;
+}
