@@ -39,7 +39,7 @@ export const AVATAR_IMAGES = {
   quickMan: quickManIcon,
   visoredHelm: visoredHelmIcon,
   wizard: wizardIcon,
-  womanElf: womanElfIcon,
+  femaleElf: womanElfIcon,
   witch: witchIcon,
 };
 
