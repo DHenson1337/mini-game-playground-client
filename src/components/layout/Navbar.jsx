@@ -123,7 +123,7 @@ const Navbar = () => {
                   <span className="dropdown-username">{user.username}</span>
                 </div>
                 <a href="#" onClick={(e) => handleNavigation("/profile", e)}>
-                  Change Avatar
+                  Account Settings
                 </a>
                 <button onClick={handleLogout} className="logout-button">
                   Logout

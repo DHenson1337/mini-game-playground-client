@@ -4,12 +4,15 @@ import { useUser } from "../context/UserContext";
 import authService from "../services/authService";
 import SuccessMessage from "../components/SuccessMessage";
 import { AVATARS } from "../utils/avatarUtils";
+import { Eye, EyeOff } from "lucide-react"; // Icons for password visibility toggle
 import "./styles/LandingPage.css";
 
 const LandingPage = () => {
   const navigate = useNavigate();
   const { login } = useUser();
-  const [activeTab, setActiveTab] = useState("login");
+
+  // State Management
+  const [activeTab, setActiveTab] = useState("login"); // Toggle between login and signup
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -21,10 +24,17 @@ const LandingPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
-  // Form validation
+  // Password visibility toggles
+  const [showPasswords, setShowPasswords] = useState({
+    password: false,
+    confirmPassword: false,
+  });
+
+  // Form Validation
   const validateForm = () => {
     const newErrors = {};
 
+    // Username validation
     if (formData.username.length < 3) {
       newErrors.username = "Username must be at least 3 characters";
     }
@@ -36,26 +46,31 @@ const LandingPage = () => {
         "Username can only contain letters, numbers, and underscores";
     }
 
+    // Additional validations for signup
     if (activeTab === "signup") {
+      // Password validation
       if (!formData.password) {
         newErrors.password = "Password is required";
       } else if (formData.password.length < 6) {
         newErrors.password = "Password must be at least 6 characters";
       }
 
+      // Confirm password validation
       if (formData.password !== formData.confirmPassword) {
         newErrors.confirmPassword = "Passwords do not match";
       }
-    }
 
-    if (!formData.avatar && activeTab === "signup") {
-      newErrors.avatar = "Please select an avatar";
+      // Avatar validation
+      if (!formData.avatar) {
+        newErrors.avatar = "Please select an avatar";
+      }
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
+  // Handle form submission (Login/Signup)
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -63,6 +78,8 @@ const LandingPage = () => {
     setIsLoading(true);
     try {
       let authResponse;
+
+      // Handle login vs signup
       if (activeTab === "login") {
         authResponse = await authService.login(
           formData.username,
@@ -93,6 +110,7 @@ const LandingPage = () => {
     }
   };
 
+  // Handle guest access
   const handleGuestAccess = async () => {
     setIsLoading(true);
     try {
@@ -114,7 +132,7 @@ const LandingPage = () => {
       <div className="landing-content">
         <h1>Welcome to Mini Game Playground</h1>
 
-        {/* Auth Tabs */}
+        {/* Login/Signup Toggle Tabs */}
         <div className="auth-tabs">
           <button
             className={`tab-button ${activeTab === "login" ? "active" : ""}`}
@@ -130,8 +148,9 @@ const LandingPage = () => {
           </button>
         </div>
 
-        {/* Auth Form */}
+        {/* Authentication Form */}
         <form onSubmit={handleSubmit} className="landing-form">
+          {/* Username Field */}
           <div className="form-group">
             <label htmlFor="username">Username:</label>
             <input
@@ -150,42 +169,81 @@ const LandingPage = () => {
             )}
           </div>
 
+          {/* Password Field with Visibility Toggle */}
           <div className="form-group">
             <label htmlFor="password">Password:</label>
-            <input
-              type="password"
-              id="password"
-              className={`form-input ${errors.password ? "input-error" : ""}`}
-              value={formData.password}
-              onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
-              }
-              placeholder="Enter password"
-            />
+            <div className="password-input-container">
+              <input
+                type={showPasswords.password ? "text" : "password"}
+                id="password"
+                className={`form-input ${errors.password ? "input-error" : ""}`}
+                value={formData.password}
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
+                placeholder="Enter password"
+              />
+              <button
+                type="button"
+                onClick={() =>
+                  setShowPasswords((prev) => ({
+                    ...prev,
+                    password: !prev.password,
+                  }))
+                }
+                className="password-toggle"
+              >
+                {showPasswords.password ? (
+                  <EyeOff size={20} />
+                ) : (
+                  <Eye size={20} />
+                )}
+              </button>
+            </div>
             {errors.password && (
               <span className="error-message">{errors.password}</span>
             )}
           </div>
 
+          {/* Signup-specific Fields */}
           {activeTab === "signup" && (
             <>
+              {/* Confirm Password Field with Visibility Toggle */}
               <div className="form-group">
                 <label htmlFor="confirmPassword">Confirm Password:</label>
-                <input
-                  type="password"
-                  id="confirmPassword"
-                  className={`form-input ${
-                    errors.confirmPassword ? "input-error" : ""
-                  }`}
-                  value={formData.confirmPassword}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      confirmPassword: e.target.value,
-                    })
-                  }
-                  placeholder="Confirm your password"
-                />
+                <div className="password-input-container">
+                  <input
+                    type={showPasswords.confirmPassword ? "text" : "password"}
+                    id="confirmPassword"
+                    className={`form-input ${
+                      errors.confirmPassword ? "input-error" : ""
+                    }`}
+                    value={formData.confirmPassword}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        confirmPassword: e.target.value,
+                      })
+                    }
+                    placeholder="Confirm your password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setShowPasswords((prev) => ({
+                        ...prev,
+                        confirmPassword: !prev.confirmPassword,
+                      }))
+                    }
+                    className="password-toggle"
+                  >
+                    {showPasswords.confirmPassword ? (
+                      <EyeOff size={20} />
+                    ) : (
+                      <Eye size={20} />
+                    )}
+                  </button>
+                </div>
                 {errors.confirmPassword && (
                   <span className="error-message">
                     {errors.confirmPassword}
@@ -193,6 +251,7 @@ const LandingPage = () => {
                 )}
               </div>
 
+              {/* Avatar Selection Grid */}
               <div className="form-group">
                 <label>Select Avatar:</label>
                 <div className="avatar-grid">
@@ -223,6 +282,7 @@ const LandingPage = () => {
             </>
           )}
 
+          {/* Remember Me Checkbox */}
           <div className="form-group remember-me">
             <label>
               <input
@@ -236,10 +296,12 @@ const LandingPage = () => {
             </label>
           </div>
 
+          {/* Error Messages */}
           {errors.submit && (
             <div className="error-message submit-error">{errors.submit}</div>
           )}
 
+          {/* Submit Button */}
           <button
             type="submit"
             className={`submit-button ${isLoading ? "loading" : ""}`}
@@ -252,6 +314,7 @@ const LandingPage = () => {
               : "Sign Up"}
           </button>
 
+          {/* Guest Access Button */}
           <button
             type="button"
             className="guest-button"
@@ -263,6 +326,7 @@ const LandingPage = () => {
         </form>
       </div>
 
+      {/* Success Message Overlay */}
       {showSuccess && (
         <SuccessMessage
           message={`Welcome to Mini Game Playground! ${
