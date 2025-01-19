@@ -1,0 +1,230 @@
+/* src/components/games/TicTacToe/styles/TicTacToe.css */
+
+.ttt-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+  background-color: var(--background);
+  border-radius: var(--border-radius);
+  position: relative;
+}
+
+.ttt-game-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius);
+  margin-bottom: var(--spacing-md);
+}
+
+.ttt-score-display {
+  font-size: 1.2rem;
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.ttt-difficulty-select {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--background);
+  color: var(--text);
+  border: 1px solid var(--text-secondary);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+}
+
+.ttt-game-board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-sm);
+  margin: var(--spacing-lg) 0;
+  max-width: 400px;
+  margin: var(--spacing-lg) auto;
+}
+
+.ttt-board-square {
+  aspect-ratio: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid var(--text-secondary);
+  border-radius: var(--border-radius);
+  font-size: 2.5rem;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-speed);
+  position: relative;
+  overflow: hidden;
+}
+
+.ttt-board-square:hover:not(.ttt-filled):not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--primary);
+}
+
+.ttt-board-square.ttt-filled {
+  cursor: not-allowed;
+}
+
+.ttt-board-square.ttt-winner {
+  border-color: var(--primary);
+  animation: ttt-pulse 1s infinite;
+}
+
+.ttt-board-square.ttt-x {
+  color: #4caf50;
+}
+
+.ttt-board-square.ttt-o {
+  color: #f44336;
+}
+
+.ttt-match-info {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  padding: var(--spacing-md);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--border-radius);
+  margin-bottom: var(--spacing-md);
+}
+
+.ttt-match-stat {
+  text-align: center;
+}
+
+.ttt-match-stat-label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.ttt-match-stat-value {
+  font-size: 1.2rem;
+  color: var(--text);
+  font-weight: bold;
+}
+
+.ttt-game-over-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--border-radius);
+  animation: ttt-fade-in 0.3s ease-out;
+}
+
+.ttt-game-over-content {
+  text-align: center;
+  padding: var(--spacing-lg);
+  background: rgba(0, 0, 0, 0.9);
+  border-radius: var(--border-radius);
+  border: 2px solid var(--primary);
+  color: var(--text);
+}
+
+.ttt-double-or-nothing {
+  margin-top: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--border-radius);
+}
+
+.ttt-description {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: var(--spacing-md) 0;
+}
+
+.ttt-double-buttons {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.ttt-control-button {
+  padding: var(--spacing-md) var(--spacing-lg);
+  background-color: var(--primary);
+  color: var(--text);
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: opacity var(--transition-speed);
+}
+
+.ttt-control-button.ttt-accept {
+  background-color: #4caf50;
+}
+
+.ttt-control-button.ttt-submit {
+  background-color: var(--primary);
+}
+
+.ttt-control-button:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.ttt-status-message {
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--text);
+  margin: var(--spacing-md) 0;
+  min-height: 1.5em;
+}
+
+.ttt-game-controls {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-lg);
+}
+
+.ttt-double-buttons {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: var(--spacing-md);
+}
+
+.ttt-board-square:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.ttt-status-message.thinking {
+  color: var(--primary);
+  animation: pulse 1s infinite;
+}
+
+@keyframes ttt-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(99, 102, 241, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+  }
+}
+
+@keyframes ttt-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

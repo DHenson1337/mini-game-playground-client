@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useUser } from "../context/UserContext";
 import TetrisGame from "../components/games/TetrisGame";
+import TicTacToe from "../components/games/TicTacToe";
 import { apiService } from "../utils/apiService";
 import "./styles/GameView.css";
 
@@ -117,6 +118,9 @@ const GameView = () => {
       <div className="game-container">
         {gameId === "tetris-classic" && (
           <TetrisGame onScoreUpdate={handleScoreSubmit} />
+        )}
+        {gameId === "tic-tac-toe" && (
+          <TicTacToe onScoreUpdate={handleScoreSubmit} />
         )}
       </div>
     </div>

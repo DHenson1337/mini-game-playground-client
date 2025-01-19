@@ -43,3 +43,20 @@ Tetris Game:
 The MIT License (MIT)
 
 Copyright (c) 2015 Matthew Brandly - https://www.npmjs.com/package/react-tetris?activeTab=code
+
+Tic Tac Toe Game TODO:
+// At the top of your component, add these comments for assets:
+/\* TODO: Add sound effects
+
+- Place these files in public/assets/sounds/
+- - placeholder-move.mp3: Short click/pop sound for moves
+- - placeholder-win.mp3: Victory fanfare
+- - placeholder-lose.mp3: Defeat sound
+    \*/
+
+/\* TODO: Add game images
+
+- Place these files in public/assets/games/tic-tac-toe/
+- - thumb.png: 200x200 static thumbnail for game selection
+- - preview.gif: 400x300 animated preview showing gameplay
+    \*/
