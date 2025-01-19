@@ -1,63 +1,113 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import authService from "../services/authService";
+import {
+  getUserFromSession,
+  saveUserToSession,
+  removeUserFromSession,
+} from "../utils/userSession";
 
 const UserContext = createContext(null);
 
 export function UserProvider({ children }) {
+  // Initialize state
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Check authentication status on mount
+  // Effect to check authentication status and restore user session on mount
   useEffect(() => {
-    const checkAuth = async () => {
+    const initializeAuth = async () => {
       try {
-        const isAuthenticated = await authService.checkAuth();
-        if (!isAuthenticated) {
-          setUser(null);
+        setLoading(true);
+
+        // First, try to get user data from session storage
+        const sessionUser = getUserFromSession();
+
+        if (sessionUser) {
+          // If we have a stored user, verify their auth status with the server
+          const isAuthenticated = await authService.checkAuth();
+
+          if (isAuthenticated) {
+            setUser(sessionUser);
+          } else {
+            // If server says not authenticated, clear stored data
+            removeUserFromSession();
+            setUser(null);
+          }
+        } else {
+          // No stored user data, try to refresh token
+          try {
+            const refreshed = await authService.refreshToken();
+            if (refreshed) {
+              // If token refresh successful, fetch updated user data
+              const isAuthenticated = await authService.checkAuth();
+              if (isAuthenticated) {
+                // Store the updated user data
+                saveUserToSession(isAuthenticated.user);
+                setUser(isAuthenticated.user);
+              }
+            }
+          } catch (refreshError) {
+            console.log("Token refresh failed:", refreshError);
+            setUser(null);
+          }
         }
       } catch (error) {
-        console.error("Auth check failed:", error);
+        console.error("Auth initialization failed:", error);
+        setError(error.message);
         setUser(null);
       } finally {
         setLoading(false);
       }
     };
 
-    checkAuth();
+    initializeAuth();
   }, []);
 
+  // Handler for user login
   const login = async (userData) => {
     setUser(userData);
+    saveUserToSession(userData);
   };
 
+  // Handler for user logout
   const logout = async () => {
     try {
       await authService.logout();
+      removeUserFromSession();
       setUser(null);
     } catch (error) {
       console.error("Logout failed:", error);
+      throw error;
     }
   };
 
+  // Handler for updating user data
   const updateUser = (updates) => {
-    setUser((prev) => ({ ...prev, ...updates }));
+    const updatedUser = { ...user, ...updates };
+    setUser(updatedUser);
+    saveUserToSession(updatedUser);
   };
 
+  // Create context value object
   const value = {
     user,
     loading,
+    error,
     login,
     logout,
     updateUser,
   };
 
+  // Show loading state if authentication is being checked
   if (loading) {
-    return <div>Loading...</div>; // Todo: Create Loading Component
+    return <div>Loading...</div>; // Todo create the loading component already
   }
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 }
 
+// Custom hook for using the user context
 export function useUser() {
   const context = useContext(UserContext);
   if (context === undefined) {
@@ -65,3 +115,5 @@ export function useUser() {
   }
   return context;
 }
+
+export default UserContext;

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router";
 import { useUser } from "../context/UserContext";
 import TetrisGame from "../components/games/TetrisGame";
 import TicTacToe from "../components/games/TicTacToe";
+import SnakeGame from "../components/games/SnakeGame";
 import { apiService } from "../utils/apiService";
 import "./styles/GameView.css";
 
@@ -122,6 +123,7 @@ const GameView = () => {
         {gameId === "tic-tac-toe" && (
           <TicTacToe onScoreUpdate={handleScoreSubmit} />
         )}
+        {gameId === "snake" && <SnakeGame onScoreUpdate={handleScoreSubmit} />}
       </div>
     </div>
   );
