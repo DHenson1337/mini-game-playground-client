@@ -5,6 +5,7 @@ import { useUser } from "../../context/UserContext";
 import "./styles/Navbar.css";
 import { AVATAR_IMAGES, getAvatarImage } from "../../utils/avatarUtils";
 import authService from "../../services/authService";
+import SoundControls from "../SoundControls";
 
 const Navbar = () => {
   const [isAudioEnabled, setIsAudioEnabled] = useState(true);
@@ -62,21 +63,7 @@ const Navbar = () => {
             className="logo-image"
           />
         </a>
-        <button
-          className={`audio-toggle ${!isAudioEnabled ? "audio-disabled" : ""}`}
-          onClick={toggleAudio}
-          aria-label={isAudioEnabled ? "Disable Audio" : "Enable Audio"}
-        >
-          <img
-            src={
-              isAudioEnabled
-                ? "/assets/icons/audioOn.png"
-                : "/assets/icons/audioOff.png"
-            }
-            alt={isAudioEnabled ? "Audio On" : "Audio Off"}
-            className="audio-icon"
-          />
-        </button>
+        <SoundControls />
       </div>
 
       {/* Center */}

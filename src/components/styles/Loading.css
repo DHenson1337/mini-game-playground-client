@@ -1,0 +1,65 @@
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-md);
+}
+
+.loading-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.loading-spinner {
+  animation: spin 1.5s linear infinite;
+  color: var(--primary);
+}
+
+.loading-text {
+  color: var(--text);
+  margin: 0;
+}
+
+/* Size variants */
+.loading-small {
+  min-height: 100px;
+}
+
+.loading-default {
+  min-height: 200px;
+}
+
+.loading-large {
+  min-height: 300px;
+}
+
+/* Fullscreen variant */
+.loading-fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  background-color: var(--background);
+}
+
+/* Overlay variant */
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 40;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

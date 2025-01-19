@@ -11,6 +11,18 @@ Currently, two official plugins are available:
 
 So like. I'll make the read me later. . .for now i'll post links of any resources I get and cleanup later.
 
+Website Credits:
+
+Sounds:
+Click Sound Effect: https://freesound.org/people/InspectorJ/sounds/411088/
+"Bell, Candle Damper, A (H4n).wav" by InspectorJ (www.jshaw.co.uk) of Freesound.org
+
+Hover 1 by plasterbrain -- https://freesound.org/s/237422/ -- License: Creative Commons 0
+
+UI Click Menu Hover by EminYILDIRIM -- https://freesound.org/s/611451/ -- License: Attribution 4.0
+
+Button Click 2.wav by Mellau -- https://freesound.org/s/506053/ -- License: Attribution NonCommercial 4.0
+
 Icons from game-icons.net
 Lorc under CC BY 3.0
 Coweled Icon - https://game-icons.net/1x1/lorc/cowled.html#download
@@ -39,11 +51,17 @@ Clean up landing page to use the avatarUtil
 Fix user Sign in
 Fix Elf Icon not being selected
 
+======================================================================================
+Tetris Game Credits:
+
 Tetris Game:
 The MIT License (MIT)
 
 Copyright (c) 2015 Matthew Brandly - https://www.npmjs.com/package/react-tetris?activeTab=code
 
+Tetris line success -- success.wav by grunz -- https://freesound.org/s/109662/ -- License: Attribution 3.0
+
+==============================================================================================
 Tic Tac Toe Game TODO:
 // At the top of your component, add these comments for assets:
 /\* TODO: Add sound effects

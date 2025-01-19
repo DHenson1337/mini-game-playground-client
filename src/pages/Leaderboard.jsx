@@ -5,6 +5,7 @@ import API_URLS from "../utils/apiUrls";
 import { getAvatarImage } from "../utils/avatarUtils";
 import { apiService } from "../utils/apiService";
 import socketClient from "../services/socketClient";
+import Loading from "../components/Loading";
 import "./styles/Leaderboard.css";
 
 const SCORES_PER_PAGE = 10;
@@ -162,7 +163,7 @@ const Leaderboard = () => {
 
           <div className="scores-list">
             {isLoading ? (
-              <LoadingSpinner />
+              <Loading message="Loading scores..." size="default" />
             ) : (
               <>
                 <div className="page-info">

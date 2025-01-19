@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import "./styles/GameSelection.css";
 import { apiService } from "../utils/apiService";
 import API_URLS from "../utils/apiUrls";
+import Loading from "../components/Loading";
 
 const GameSelection = () => {
   const navigate = useNavigate();
@@ -44,12 +45,7 @@ const GameSelection = () => {
   };
 
   if (isLoading) {
-    return (
-      <div className="loading-container">
-        <div className="loading-spinner"></div>
-        <p>Loading games...</p>
-      </div>
-    );
+    return <Loading message="Loading games..." />;
   }
 
   if (error) {

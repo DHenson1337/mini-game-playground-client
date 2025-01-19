@@ -5,6 +5,7 @@ import TetrisGame from "../components/games/TetrisGame";
 import TicTacToe from "../components/games/TicTacToe";
 import SnakeGame from "../components/games/SnakeGame";
 import { apiService } from "../utils/apiService";
+import Loading from "../components/Loading";
 import "./styles/GameView.css";
 
 const GameView = () => {
@@ -86,14 +87,8 @@ const GameView = () => {
   const handleReturnToGames = useCallback(() => {
     navigate("/games");
   }, [navigate]);
-
   if (isLoading) {
-    return (
-      <div className="game-loading">
-        <div className="loading-spinner"></div>
-        <p>Loading game...</p>
-      </div>
-    );
+    return <Loading size="large" message="Loading game..." />;
   }
 
   if (error) {

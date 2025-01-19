@@ -5,6 +5,7 @@ import {
   saveUserToSession,
   removeUserFromSession,
 } from "../utils/userSession";
+import Loading from "../components/Loading";
 
 const UserContext = createContext(null);
 
@@ -101,7 +102,7 @@ export function UserProvider({ children }) {
 
   // Show loading state if authentication is being checked
   if (loading) {
-    return <div>Loading...</div>; // Todo create the loading component already
+    return <Loading size="large" fullscreen message="Initializing..." />;
   }
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

@@ -1,13 +1,14 @@
 // components/ProtectedRoute.jsx
 import { Navigate, useLocation } from "react-router";
 import { useUser } from "../context/UserContext";
+import Loading from "./Loading";
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useUser();
   const location = useLocation();
 
   if (loading) {
-    return <div>Loading...</div>; // Todo: Add a loading component :)
+    return <Loading size="default" message="Authenticating..." />;
   }
 
   if (!user) {
