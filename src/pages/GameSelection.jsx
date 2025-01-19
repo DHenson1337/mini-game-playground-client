@@ -4,8 +4,10 @@ import "./styles/GameSelection.css";
 import { apiService } from "../utils/apiService";
 import API_URLS from "../utils/apiUrls";
 import Loading from "../components/Loading";
+import { useSoundSystem } from "../context/SoundContext";
 
 const GameSelection = () => {
+  const { playSoundEffect } = useSoundSystem();
   const navigate = useNavigate();
   const [games, setGames] = useState([]);
   const [selectedGame, setSelectedGame] = useState(null);
@@ -35,6 +37,7 @@ const GameSelection = () => {
   const handleGameSelect = (game) => {
     if (game.enabled) {
       setSelectedGame(game);
+      playSoundEffect("click");
     }
   };
 
@@ -70,7 +73,11 @@ const GameSelection = () => {
                       ${
                         selectedGame?.gameId === game.gameId ? "selected" : ""
                       }`}
-            onClick={() => handleGameSelect(game)}
+            onClick={() => {
+              playSoundEffect("click");
+              handleGameSelect(game);
+            }}
+            onMouseEnter={() => game.enabled && playSoundEffect("hover")}
           >
             <div className="game-card-content">
               <img
@@ -122,8 +129,16 @@ const GameSelection = () => {
                 </div>
               )}
 
+              {/* Play Button */}
               {selectedGame.enabled && (
-                <button className="play-button" onClick={handlePlayGame}>
+                <button
+                  className="play-button"
+                  onClick={() => {
+                    playSoundEffect("click");
+                    handlePlayGame();
+                  }}
+                  onMouseEnter={() => playSoundEffect("hover")}
+                >
                   Play Now
                 </button>
               )}

@@ -10,6 +10,7 @@ import Leaderboard from "./pages/Leaderboard";
 import NotFound from "./pages/NotFound";
 import ProfilePage from "./pages/ProfilePage";
 import { SoundProvider } from "./context/SoundContext";
+import PageMusic from "./components/PageMusic";
 // import TestAuth from "./TestAuth"; For testing
 // import TestLogin from "./TestLogin"; //Temp for Testing
 
@@ -17,6 +18,7 @@ function App() {
   return (
     <UserProvider>
       <SoundProvider>
+        <PageMusic />
         <Routes>
           {/* Landing page is separate from main layout */}
           <Route path="/" element={<LandingPage />} />

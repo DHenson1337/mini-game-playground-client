@@ -5,9 +5,11 @@ import authService from "../services/authService";
 import SuccessMessage from "../components/SuccessMessage";
 import { AVATARS } from "../utils/avatarUtils";
 import { Eye, EyeOff } from "lucide-react"; // Icons for password visibility toggle
+import { useSoundSystem } from "../context/SoundContext";
 import "./styles/LandingPage.css";
 
 const LandingPage = () => {
+  const { playSoundEffect } = useSoundSystem();
   const navigate = useNavigate();
   const { login } = useUser();
 
@@ -134,15 +136,25 @@ const LandingPage = () => {
 
         {/* Login/Signup Toggle Tabs */}
         <div className="auth-tabs">
+          {/* Login */}
           <button
             className={`tab-button ${activeTab === "login" ? "active" : ""}`}
-            onClick={() => setActiveTab("login")}
+            onClick={() => {
+              setActiveTab("login");
+              playSoundEffect("click");
+            }}
+            onMouseEnter={() => playSoundEffect("hover")}
           >
             Login
           </button>
+
           <button
             className={`tab-button ${activeTab === "signup" ? "active" : ""}`}
-            onClick={() => setActiveTab("signup")}
+            onClick={() => {
+              setActiveTab("signup");
+              playSoundEffect("click");
+            }}
+            onMouseEnter={() => playSoundEffect("hover")}
           >
             Sign Up
           </button>
@@ -263,9 +275,11 @@ const LandingPage = () => {
                       className={`avatar-button ${
                         formData.avatar === avatar.id ? "selected" : ""
                       }`}
-                      onClick={() =>
-                        setFormData({ ...formData, avatar: avatar.id })
-                      }
+                      onClick={() => {
+                        playSoundEffect("click");
+                        setFormData({ ...formData, avatar: avatar.id });
+                      }}
+                      onMouseEnter={() => playSoundEffect("hover")}
                     >
                       <img
                         src={avatar.image}
@@ -306,6 +320,7 @@ const LandingPage = () => {
             type="submit"
             className={`submit-button ${isLoading ? "loading" : ""}`}
             disabled={isLoading}
+            onMouseEnter={() => playSoundEffect("hover")}
           >
             {isLoading
               ? "Please wait..."
@@ -318,7 +333,11 @@ const LandingPage = () => {
           <button
             type="button"
             className="guest-button"
-            onClick={handleGuestAccess}
+            onClick={() => {
+              playSoundEffect("click");
+              handleGuestAccess();
+            }}
+            onMouseEnter={() => playSoundEffect("hover")}
             disabled={isLoading}
           >
             Continue as Guest

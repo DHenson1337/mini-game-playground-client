@@ -1,13 +1,36 @@
-// src/components/games/TetrisGame/index.jsx
-
 import React, { useState, useEffect, useCallback } from "react";
 import Tetris from "react-tetris";
+import useSound from "use-sound";
+import { useSoundSystem } from "../../../context/SoundContext";
 import "./styles.css";
 
 const TetrisGame = ({ onScoreUpdate }) => {
   const [gameState, setGameState] = useState("ready");
   const [currentScore, setCurrentScore] = useState(0);
   const [isScoreSubmitted, setIsScoreSubmitted] = useState(false);
+  const { isMuted, volume } = useSoundSystem();
+
+  // Sound effects setup with volume control
+  const [playRotate] = useSound("/assets/sounds/tetris/rotate.wav", {
+    volume: volume * 0.5,
+    disabled: isMuted,
+  });
+  const [playMove] = useSound("/assets/sounds/tetris/move.wav", {
+    volume: volume * 0.3,
+    disabled: isMuted,
+  });
+  const [playLineClear] = useSound("/assets/sounds/tetris/line-clear.wav", {
+    volume: volume * 0.6,
+    disabled: isMuted,
+  });
+  const [playHardDrop] = useSound("/assets/sounds/tetris/hard-drop.wav", {
+    volume: volume * 0.4,
+    disabled: isMuted,
+  });
+  const [playGameOver] = useSound("/assets/sounds/tetris/game-over.wav", {
+    volume: volume * 0.7,
+    disabled: isMuted,
+  });
 
   useEffect(() => {
     const preventArrowScroll = (e) => {
@@ -27,10 +50,8 @@ const TetrisGame = ({ onScoreUpdate }) => {
       if (isScoreSubmitted) return;
 
       try {
-        console.log("Submitting score:", points); // Debug log
         await onScoreUpdate(points);
         setIsScoreSubmitted(true);
-        console.log("Score submitted successfully:", points);
       } catch (error) {
         console.error("Failed to submit score:", error);
       }
@@ -38,13 +59,34 @@ const TetrisGame = ({ onScoreUpdate }) => {
     [onScoreUpdate, isScoreSubmitted]
   );
 
-  // Update game state when game ends
-  const handleGameStateChange = useCallback((state, points) => {
-    setGameState(state);
-    if (state === "LOST") {
-      setCurrentScore(points);
-    }
-  }, []);
+  // Sound effect handlers
+  const handlePieceMove = useCallback(() => {
+    playMove();
+  }, [playMove]);
+
+  const handlePieceRotate = useCallback(() => {
+    playRotate();
+  }, [playRotate]);
+
+  const handleLineClear = useCallback(() => {
+    playLineClear();
+  }, [playLineClear]);
+
+  const handleHardDrop = useCallback(() => {
+    playHardDrop();
+  }, [playHardDrop]);
+
+  // Update game state and handle game over
+  const handleGameStateChange = useCallback(
+    (state, points) => {
+      setGameState(state);
+      if (state === "LOST") {
+        setCurrentScore(points);
+        playGameOver();
+      }
+    },
+    [playGameOver]
+  );
 
   return (
     <div className="tetris-container">
@@ -77,11 +119,52 @@ const TetrisGame = ({ onScoreUpdate }) => {
           linesCleared,
           state,
           controller,
+          onAction,
         }) => {
           // Update game state when it changes
           useEffect(() => {
             handleGameStateChange(state, points);
           }, [state, points]);
+
+          // Handle game actions and trigger sound effects
+          useEffect(() => {
+            const actionHandler = (action) => {
+              switch (action) {
+                case "MOVE_LEFT":
+                case "MOVE_RIGHT":
+                case "MOVE_DOWN":
+                  handlePieceMove();
+                  break;
+                case "FLIP_CLOCKWISE":
+                case "FLIP_COUNTERCLOCKWISE":
+                  handlePieceRotate();
+                  break;
+                case "HARD_DROP":
+                  handleHardDrop();
+                  break;
+                case "LINE_CLEAR":
+                  handleLineClear();
+                  break;
+                default:
+                  break;
+              }
+            };
+
+            if (onAction) {
+              onAction(actionHandler);
+            }
+
+            return () => {
+              if (onAction) {
+                onAction(null);
+              }
+            };
+          }, [
+            handlePieceMove,
+            handlePieceRotate,
+            handleHardDrop,
+            handleLineClear,
+          ]);
 
           return (
             <div className="tetris-game">

@@ -11,6 +11,7 @@ Currently, two official plugins are available:
 
 So like. I'll make the read me later. . .for now i'll post links of any resources I get and cleanup later.
 
+=========================================================================================================
 Website Credits:
 
 Sounds:
@@ -22,6 +23,14 @@ Hover 1 by plasterbrain -- https://freesound.org/s/237422/ -- License: Creative 
 UI Click Menu Hover by EminYILDIRIM -- https://freesound.org/s/611451/ -- License: Attribution 4.0
 
 Button Click 2.wav by Mellau -- https://freesound.org/s/506053/ -- License: Attribution NonCommercial 4.0
+
+Success Jingle by JustInvoke -- https://freesound.org/s/446111/ -- License: Attribution 4.0
+
+Error Sound by thehorriblejoke -- https://freesound.org/s/351500/ -- License: Creative Commons 0
+
+Bgm1 - Platform Game Theme Loop 2 by Mrthenoronha -- https://freesound.org/s/476546/ -- License: Attribution NonCommercial 4.0
+
+Menu_loop by naomuhibu -- https://freesound.org/s/728588/ -- License: Creative Commons 0
 
 Icons from game-icons.net
 Lorc under CC BY 3.0
@@ -44,6 +53,7 @@ Audio Icon on/off - https://icons8.com/icon/hfXXwcg8qpqT/audio
 
 Logo - Logo.com
 
+=====================================================================================================
 TODO:
 
 Fix Hover effect bug on landing page grid.
@@ -61,7 +71,13 @@ Copyright (c) 2015 Matthew Brandly - https://www.npmjs.com/package/react-tetris?
 
 Tetris line success -- success.wav by grunz -- https://freesound.org/s/109662/ -- License: Attribution 3.0
 
+Tetris BGM - Plastic Adrenaline (Loop).mp3 by Adam_Zero -- https://freesound.org/s/678988/ -- License: Attribution 4.0
+
 ==============================================================================================
+Tic Tac Toe BGM: Steady Hand (Loop).mp3 by Adam_Zero -- https://freesound.org/s/678991/ -- License: Attribution 4.0
+
+==============================================================================
+
 Tic Tac Toe Game TODO:
 // At the top of your component, add these comments for assets:
 /\* TODO: Add sound effects
