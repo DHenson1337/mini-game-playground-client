@@ -1,15 +1,26 @@
-/* For the user section */
-.user-menu {
-  position: relative; /* Add this to establish positioning context */
-}
-
+/* Enhanced Navbar with Video Game Style */
 .navbar {
-  background-color: var(--background);
+  background: rgba(0, 0, 0, 0.95);
   padding: var(--spacing-md) var(--spacing-lg);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid var(--text-secondary);
+  border-bottom: 2px solid var(--primary);
+  position: relative;
+  z-index: 1000;
+}
+
+/* Glowing border effect */
+.navbar::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--primary);
+  filter: blur(4px);
+  opacity: 0.6;
 }
 
 /* Left Section */
@@ -20,27 +31,19 @@
   min-width: 200px;
 }
 
+.logo {
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.logo:hover {
+  transform: scale(1.05);
+}
+
 .logo-image {
   height: 40px;
   width: auto;
-}
-
-.audio-toggle {
-  background: none;
-  border: 1px solid var(--text-secondary);
-  color: var(--text);
-  padding: var(--spacing-sm);
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: opacity var(--transition-speed);
-}
-
-.audio-icon {
-  height: 24px;
-  width: 24px;
+  filter: drop-shadow(0 0 8px var(--primary));
 }
 
 /* Center Section */
@@ -56,18 +59,41 @@
   text-decoration: none;
   font-weight: 500;
   padding: var(--spacing-sm) var(--spacing-md);
-  transition: color var(--transition-speed);
+  position: relative;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+.nav-center a::before {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--primary);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
 }
 
 .nav-center a:hover {
   color: var(--primary);
+  text-shadow: 0 0 10px var(--primary);
 }
 
-/* Right Section */
+.nav-center a:hover::before {
+  width: 100%;
+}
+
+/* Right Section - User Menu */
 .nav-right {
   min-width: 200px;
   display: flex;
   justify-content: flex-end;
+}
+
+.user-menu {
+  position: relative;
 }
 
 .user-avatar {
@@ -76,34 +102,38 @@
   border-radius: 50%;
   cursor: pointer;
   border: 2px solid transparent;
-  transition: border-color var(--transition-speed);
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
 .user-avatar:hover {
   border-color: var(--primary);
+  transform: scale(1.1);
+  box-shadow: 0 0 15px var(--primary);
 }
 
+/* Dropdown Menu */
 .dropdown-menu {
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
-  margin-top: var(--spacing-sm);
-  background-color: var(--background);
-  border: 1px solid var(--text-secondary);
+  background: rgba(0, 0, 0, 0.95);
+  border: 1px solid var(--primary);
   border-radius: var(--border-radius);
   padding: var(--spacing-sm) 0;
-  min-width: 150px;
-  z-index: 1000;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  min-width: 200px;
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+  backdrop-filter: blur(10px);
+  transform-origin: top right;
+  animation: dropdownAppear 0.3s ease forwards;
 }
 
-/* Drop Down Menu Settings */
 .dropdown-header {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
-  padding: var(--spacing-sm);
-  border-bottom: 1px solid var(--text-secondary);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   margin-bottom: var(--spacing-sm);
 }
 
@@ -111,11 +141,27 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
+  border: 1px solid var(--primary);
 }
 
 .dropdown-username {
-  color: var(--text);
+  color: var(--primary);
   font-weight: 500;
+  text-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: var(--spacing-sm) var(--spacing-md);
+  color: var(--text);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.dropdown-menu a:hover {
+  background: var(--primary);
+  color: var(--text);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 .logout-button {
@@ -126,21 +172,22 @@
   color: var(--text);
   text-align: left;
   cursor: pointer;
-  transition: background-color var(--transition-speed);
+  transition: all 0.3s ease;
 }
 
 .logout-button:hover {
-  background-color: var(--primary);
+  background: #ff4444;
+  color: white;
+  text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
 }
 
-.dropdown-menu a {
-  display: block;
-  padding: var(--spacing-sm) var(--spacing-md);
-  color: var(--text);
-  text-decoration: none;
-  transition: background-color var(--transition-speed);
-}
-
-.dropdown-menu a:hover {
-  background-color: var(--primary);
+@keyframes dropdownAppear {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

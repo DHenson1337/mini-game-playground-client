@@ -1,8 +1,8 @@
-/* CSS Variables for consistent theming */
 :root {
   /* Color palette */
-  --primary: #6374f1;
-  --background: #1a1a1a;
+  --background: #080808; /* Darker black */
+  --primary: #0091ff; /* A blue I like duh*/
+  --primary-glow: rgba(0, 247, 255, 0.5);
   --text: #ffffff;
   --text-secondary: #a1a1a1;
 
@@ -18,8 +18,20 @@
   --transition-speed: 0.3s;
 }
 
-/* Dark theme variables (But lets be honest, there is no lightmode :>) */
-[data-theme="dark"] {
-  --background: #1a1a1a;
-  --text: #ffffff;
+/* For future use with the gaming font */
+@font-face {
+  font-family: "Press Start 2P";
+  src: url("/fonts/PressStart2P-Regular.ttf") format("truetype");
+}
+
+/* Gaming font utility classes - to be used after font implementation */
+.game-title {
+  font-family: "Press Start 2P", cursive;
+  letter-spacing: 2px;
+}
+
+.game-text {
+  font-family: "Press Start 2P", cursive;
+  font-size: 0.8em; /* Gaming fonts tend to be larger */
+  letter-spacing: 1px;
 }
