@@ -1,0 +1,76 @@
+# Credits
+
+## Website Assets
+
+### Sound Effects
+- Click Sound Effect: ["Bell, Candle Damper, A (H4n).wav"](https://freesound.org/people/InspectorJ/sounds/411088/) by InspectorJ (www.jshaw.co.uk) of Freesound.org
+- Hover Sound: [Hover 1](https://freesound.org/s/237422/) by plasterbrain -- License: Creative Commons 0
+- Menu Hover: [UI Click Menu Hover](https://freesound.org/s/611451/) by EminYILDIRIM -- License: Attribution 4.0
+- Button Click: [Button Click 2.wav](https://freesound.org/s/506053/) by Mellau -- License: Attribution NonCommercial 4.0
+- Success Sound: [Success Jingle](https://freesound.org/s/446111/) by JustInvoke -- License: Attribution 4.0
+- Error Sound: [Error Sound](https://freesound.org/s/351500/) by thehorriblejoke -- License: Creative Commons 0
+- Landing Page BGM: [Light Mister - Intro](https://freesound.org/s/642309/) by LightMister -- License: Attribution 4.0
+
+### Icons
+All icons from game-icons.net under CC BY 3.0
+
+By Lorc:
+- [Cowled Icon](https://game-icons.net/1x1/lorc/cowled.html)
+- [Visored helm Icon](https://game-icons.net/1x1/lorc/visored-helm.html)
+- [Hood Icon](https://game-icons.net/1x1/lorc/hood.html)
+
+By Delapouite:
+- [Female vampire icon](https://game-icons.net/1x1/delapouite/female-vampire.html)
+- [Vampire Dracula icon](https://game-icons.net/1x1/delapouite/vampire-dracula.html)
+- [Wizard face icon](https://game-icons.net/1x1/delapouite/wizard-face.html)
+- [Quick man icon](https://game-icons.net/1x1/delapouite/quick-man.html)
+- [Overlord helm icon](https://game-icons.net/1x1/delapouite/overlord-helm.html)
+- [Female elf face icon](https://game-icons.net/1x1/delapouite/woman-elf-face.html)
+
+By Cathelineau:
+- [Witch face icon](https://game-icons.net/1x1/cathelineau/witch-face.html)
+
+Other Icons:
+- [Audio Icon on/off](https://icons8.com/icon/hfXXwcg8qpqT/audio) from Icons8
+
+### Other Assets
+- Logo created using Logo.com
+
+## Games
+
+### Tetris
+- Game Implementation: Based on [react-tetris](https://www.npmjs.com/package/react-tetris?activeTab=code) by Matthew Brandly (MIT License)
+- Sound Effects:
+  - Line Clear: [success.wav](https://freesound.org/s/109662/) by grunz -- License: Attribution 3.0
+  - Background Music: [Plastic Adrenaline (Loop).mp3](https://freesound.org/s/678988/) by Adam_Zero -- License: Attribution 4.0
+  - Game Over: [Game Over 04.wav](https://freesound.org/s/365782/) by MATRIXXX_ -- License: Creative Commons 0
+  - Move Sound: [Arcade UI Move Cursor](https://freesound.org/s/464903/) by plasterbrain -- License: Creative Commons 0
+- Preview Image: [Tetris Artwork](https://dribbble.com/shots/9239848-Tetris/attachments/1283484?mode=media) from Dribbble
+
+### Tic Tac Toe
+- Background Music: [Steady Hand (Loop).mp3](https://freesound.org/s/678991/) by Adam_Zero -- License: Attribution 4.0
+- Preview Image: [Cereal Tic Tac Toe](https://tenor.com/view/cereal-tic-tac-toe-gif-9950777) from Tenor
+
+### Snake
+- Background Music: "Snake Charmer" by Steve Oxen from [Fesliyan Studios](https://www.fesliyanstudios.com/)
+- Preview Image: ["Quit Playing Games with Your Cravings"](https://dribbble.com/shots/14968252-Quit-playing-games-with-your-cravings/attachments/6687262?mode=media) by Akanksha Jain on Dribbble
+
+## Libraries and Frameworks
+
+### Frontend
+- React
+- Framer Motion
+- Socket.IO Client
+- use-sound
+- lucide-react
+- zustand
+
+### Backend
+- Express
+- MongoDB/Mongoose
+- Socket.IO
+- JSON Web Token
+- bcrypt
+
+## Special Thanks
+Special thanks to all the creators and contributors who made their work available for use in this project.

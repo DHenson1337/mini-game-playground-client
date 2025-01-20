@@ -1,130 +1,114 @@
-# React + Vite
+# Mini Game Playground - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React-based gaming platform featuring classic games with modern styling and real-time features.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 🎮 Multiple Classic Games
+  - Tetris
+  - Tic Tac Toe
+  - Snake
+- 🏆 Real-time Leaderboards
+- 🎵 Dynamic Sound System
+- 🔐 User Authentication
+- 👤 Guest Access
+- 💾 Score Persistence
+- 🎨 Modern UI with Glassmorphism Design
 
-# mini-game-playground-client
+## Tech Stack
 
-So like. I'll make the read me later. . .for now i'll post links of any resources I get and cleanup later.
+- React 18
+- Socket.IO Client
+- Framer Motion
+- React Router
+- Zustand (State Management)
 
-=========================================================================================================
-Website Credits:
+## Prerequisites
 
-Sounds:
-Click Sound Effect: https://freesound.org/people/InspectorJ/sounds/411088/
-"Bell, Candle Damper, A (H4n).wav" by InspectorJ (www.jshaw.co.uk) of Freesound.org
+- Node.js 20.x or higher
+- npm 9.x or higher
 
-Hover 1 by plasterbrain -- https://freesound.org/s/237422/ -- License: Creative Commons 0
+## Installation
 
-UI Click Menu Hover by EminYILDIRIM -- https://freesound.org/s/611451/ -- License: Attribution 4.0
+1. Clone the repository:
 
-Button Click 2.wav by Mellau -- https://freesound.org/s/506053/ -- License: Attribution NonCommercial 4.0
+   ```bash
+   git clone [your-repo-url]
+   cd mini-game-playground-client
+   ```
 
-Success Jingle by JustInvoke -- https://freesound.org/s/446111/ -- License: Attribution 4.0
+2. Install dependencies:
 
-Error Sound by thehorriblejoke -- https://freesound.org/s/351500/ -- License: Creative Commons 0
+   ```bash
+   npm install
+   ```
 
-Bgm1 - Platform Game Theme Loop 2 by Mrthenoronha -- https://freesound.org/s/476546/ -- License: Attribution NonCommercial 4.0
+3. Create a .env file:
 
-Menu_loop by naomuhibu -- https://freesound.org/s/728588/ -- License: Creative Commons 0
+   ```env
+   VITE_BACKEND_URL=http://localhost:5000
+   ```
 
-Icons from game-icons.net
-Lorc under CC BY 3.0
-Coweled Icon - https://game-icons.net/1x1/lorc/cowled.html#download
-Visored helm Icon - https://game-icons.net/1x1/lorc/visored-helm.html
-Hood Icon - https://game-icons.net/1x1/lorc/hood.html
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-by Delapouite under CC BY 3.0
-Female vampire icon - https://game-icons.net/1x1/delapouite/female-vampire.html
-Vampire Dracula icon - https://game-icons.net/1x1/delapouite/vampire-dracula.html
-Wizard face icon - https://game-icons.net/1x1/delapouite/wizard-face.html
-Quick man icon - https://game-icons.net/1x1/delapouite/quick-man.html
-Overlord helm icon - https://game-icons.net/1x1/delapouite/overlord-helm.html
-Female elf face icon - https://game-icons.net/1x1/delapouite/woman-elf-face.html
+## Environment Variables
 
-by Cathelineau under CC BY 3.0
-Witch face icon - https://game-icons.net/1x1/cathelineau/witch-face.html
+- `VITE_BACKEND_URL`: URL of the backend server
 
-Audio Icon on/off - https://icons8.com/icon/hfXXwcg8qpqT/audio
+## Project Structure
 
-Logo - Logo.com
+```
+src/
+├── components/
+│   ├── games/         # Game components
+│   ├── layout/        # Layout components
+│   └── ui/           # Reusable UI components
+├── context/          # React context providers
+├── pages/           # Page components
+├── services/        # API and service logic
+├── styles/          # Global styles
+└── utils/          # Utility functions
+```
 
-=====================================================================================================
-TODO:
+## Game Integration
 
-Fix Hover effect bug on landing page grid.
-Clean up landing page to use the avatarUtil
-Fix user Sign in
-Fix Elf Icon not being selected
+To add a new game:
 
-======================================================================================
-Tetris Game Credits:
+1. Create game component in `src/components/games/`
+2. Add game data to backend initialization
+3. Update game selection page
+4. Add score handling
+5. Update leaderboard compatibility
 
-Tetris Game:
-The MIT License (MIT)
+## Available Scripts
 
-Copyright (c) 2015 Matthew Brandly - https://www.npmjs.com/package/react-tetris?activeTab=code
+- `npm run dev`: Start development server
+- `npm run build`: Build for production
+- `npm run preview`: Preview production build
+- `npm run lint`: Run ESLint
 
-Tetris line success -- success.wav by grunz -- https://freesound.org/s/109662/ -- License: Attribution 3.0
+## Features in Development
 
-Tetris BGM - Plastic Adrenaline (Loop).mp3 by Adam_Zero -- https://freesound.org/s/678988/ -- License: Attribution 4.0
+- Achievement System
+- Profile Customization
+- Additional Games
+- Multiplayer Support
 
-GameOver - Game Over 04.wav by MATRIXXX\_ -- https://freesound.org/s/365782/ -- License: Creative Commons 0
+## Contributing
 
-Move - Arcade UI Move Cursor by plasterbrain -- https://freesound.org/s/464903/ -- License: Creative Commons 0
+1. Fork the repository
+2. Create feature branch
+3. Commit changes
+4. Push to branch
+5. Open pull request
 
-Preview Image:
-Title: Tetris Artwork
-Creator: Designer/Artist's Name on Dribbble
-Platform: Dribbble
-URL: Dribbble Page (https://dribbble.com/shots/9239848-Tetris/attachments/1283484?mode=media)
+## License
 
-==============================================================================================
-Tic Tac Toe BGM: Steady Hand (Loop).mp3 by Adam_Zero -- https://freesound.org/s/678991/ -- License: Attribution 4.0
+[Pending...]
 
-Preview img - GIF Title: Cereal Tic Tac Toe
-Creator: Unknown (Source: Tenor)
-Link: [https://tenor.com/view/cereal-tic-tac-toe-gif-9950777](https://tenor.com/view/cereal-tic-tac-toe-gif-9950777)
+## Credits
 
-==============================================================================
-
-Snake Game:
-
-BGM: "Snake Charmer" by Steve Oxen
-Licensed by Fesliyan Studios
-https://www.fesliyanstudios.com/
-
-Preview img:
-Title: Quit Playing Games with Your Cravings
-Creator: Akanksha Jain
-Platform: Dribbble
-URL: https://dribbble.com/shots/14968252-Quit-playing-games-with-your-cravings/attachments/6687262?mode=media
-
-============================================================================
-
-Tic Tac Toe Game TODO:
-// At the top of your component, add these comments for assets:
-/\* TODO: Add sound effects
-
-- Place these files in public/assets/sounds/
-- - placeholder-move.mp3: Short click/pop sound for moves
-- - placeholder-win.mp3: Victory fanfare
-- - placeholder-lose.mp3: Defeat sound
-    \*/
-
-/\* TODO: Add game images
-
-- Place these files in public/assets/games/tic-tac-toe/
-- - thumb.png: 200x200 static thumbnail for game selection
-- - preview.gif: 400x300 animated preview showing gameplay
-    \*/
-
-    Add sound effects to all games.
-
-    work on the logic for Tic Tac Toe - AI difficulty (maybe multiplayer)
-
-    Work on the logic for snake game - More elements, power ups, events, etc
+See CREDITS.md for full attribution of assets and libraries used.
