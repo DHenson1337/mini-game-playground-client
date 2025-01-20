@@ -11,6 +11,7 @@ import NotFound from "./pages/NotFound";
 import ProfilePage from "./pages/ProfilePage";
 import { SoundProvider } from "./context/SoundContext";
 import PageMusic from "./components/PageMusic";
+import BackgroundEffects from "./components/BackgroundEffects";
 // import TestAuth from "./TestAuth"; For testing
 // import TestLogin from "./TestLogin"; //Temp for Testing
 
@@ -18,6 +19,7 @@ function App() {
   return (
     <UserProvider>
       <SoundProvider>
+        <BackgroundEffects />
         <PageMusic />
         <Routes>
           {/* Landing page is separate from main layout */}

@@ -21,6 +21,86 @@
   animation: slideIn 0.3s ease-out;
 }
 
+/* Additional styles for LandingPage.css */
+
+/* Error Popup */
+.error-popup {
+  background: rgba(255, 0, 0, 0.1);
+  border: 1px solid #ff4444;
+  color: #ff4444;
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius);
+  text-align: center;
+  animation: errorShake 0.5s ease;
+}
+
+/* Success Overlay */
+.success-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.success-content {
+  background: rgba(0, 0, 0, 0.9);
+  border: 2px solid var(--primary);
+  border-radius: var(--border-radius);
+  padding: calc(var(--spacing-lg) * 2);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.success-content::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, transparent, var(--primary), transparent);
+  animation: borderFlow 2s linear infinite;
+  z-index: -1;
+}
+
+.success-content h2 {
+  color: var(--primary);
+  margin-bottom: var(--spacing-md);
+  text-shadow: 0 0 10px var(--primary);
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  margin: var(--spacing-md) auto;
+  border: 3px solid transparent;
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Landing Page Specific Particles */
+.login-particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.login-particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: var(--primary);
+  left: var(--position);
+  animation: particleFloat 10s linear infinite;
+  animation-delay: var(--delay);
+  opacity: 0;
+}
+
 @keyframes slideIn {
   from {
     transform: translateY(-20px);
@@ -29,5 +109,61 @@
   to {
     transform: translateY(0);
     opacity: 1;
+  }
+}
+
+/* Animations */
+@keyframes errorShake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-10px);
+  }
+  75% {
+    transform: translateX(10px);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes borderFlow {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes particleFloat {
+  0% {
+    transform: translateY(100vh) scale(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.5;
+  }
+  90% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-20vh) scale(1);
+    opacity: 0;
   }
 }

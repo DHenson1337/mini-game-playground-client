@@ -1,5 +1,6 @@
 /* Import variables */
 @import "./variables.css";
+@import "./background.css";
 
 /* Reset and base styles */
 * {

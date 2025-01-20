@@ -1,104 +1,140 @@
-/* styles/LandingPage.css */
+/* LandingPage.css - Complete Styles */
 
+/* Main container */
 .landing-container {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: var(--spacing-lg);
-  background-color: var(--background);
-  color: var(--text);
+  position: relative;
+  overflow: hidden;
 }
 
-.landing-content {
-  max-width: 600px;
-  width: 100%;
+/* Title/Logo styling */
+.landing-title {
+  position: absolute;
+  top: 50px; /* Changed from 5% to a fixed value */
+  left: 50%;
+  transform: translateX(-50%);
   text-align: center;
+  z-index: 2;
+  width: 100%; /* Added to ensure full width */
+  margin-bottom: 40px; /* Added extra space below title */
 }
 
-/* Auth Tabs */
+.landing-title h1 {
+  font-size: 3.5rem;
+  color: var(--text);
+  text-shadow: 0 0 20px var(--primary), 0 0 40px var(--primary);
+  margin-bottom: 2rem;
+  animation: title-glow 3s ease-in-out infinite;
+}
+
+/* Main login/signup box */
+.landing-content {
+  background: rgba(7, 7, 10, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--primary);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
+  width: 100%;
+  max-width: 600px;
+  position: relative;
+  box-shadow: 0 0 20px rgba(0, 145, 255, 0.2);
+  margin-top: 120px;
+  z-index: 1;
+}
+
+/* Glowing border effect */
+.landing-content::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(0, 145, 255, 0.3),
+    /* Reduced opacity */ transparent 70%
+  );
+  border-radius: var(--border-radius);
+  z-index: -1;
+  animation: border-flow 4s linear infinite; /* Slowed down animation */
+}
+
+/* Login/New Character tabs */
 .auth-tabs {
   display: flex;
   justify-content: center;
-  gap: var(--spacing-md);
+  gap: var(--spacing-lg);
   margin: var(--spacing-lg) 0;
+  border-bottom: 1px solid rgba(0, 145, 255, 0.3);
 }
 
 .tab-button {
+  min-width: 150px;
   padding: var(--spacing-md) var(--spacing-lg);
-  background: none;
+  background: rgba(0, 0, 0, 0.5);
   border: none;
-  border-bottom: 2px solid var(--text-secondary);
+  border-bottom: 2px solid transparent;
   color: var(--text);
   font-size: 1.1rem;
   cursor: pointer;
-  transition: all var(--transition-speed);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.tab-button::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--primary);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.tab-button:hover::before,
+.tab-button.active::before {
+  transform: scaleX(1);
 }
 
 .tab-button.active {
-  border-bottom-color: var(--primary);
   color: var(--primary);
+  background: rgba(0, 145, 255, 0.1);
 }
 
-/* Form Elements */
+/* Form styling */
 .landing-form {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-lg);
-  margin-top: var(--spacing-lg);
 }
 
 .form-group {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
-  text-align: left;
+  position: relative;
 }
 
 .form-input {
+  width: 100%;
   padding: var(--spacing-md);
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 145, 255, 0.3);
   border-radius: var(--border-radius);
-  border: 1px solid var(--text-secondary);
-  background-color: var(--background);
   color: var(--text);
-  transition: border-color var(--transition-speed);
+  transition: all 0.3s ease;
 }
 
 .form-input:focus {
-  border-color: var(--primary);
   outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 10px rgba(0, 145, 255, 0.3);
 }
 
-.form-input.input-error {
-  border-color: #ff4444;
-}
-
-.error-message {
-  color: #ff4444;
-  font-size: 0.875rem;
-}
-
-.submit-error {
-  text-align: center;
-  padding: var(--spacing-md);
-  background-color: rgba(255, 68, 68, 0.1);
-  border-radius: var(--border-radius);
-}
-
-/* Remember Me Checkbox */
-.remember-me {
-  flex-direction: row;
-  align-items: center;
-  gap: var(--spacing-md);
-}
-
-.remember-me input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  margin-right: var(--spacing-sm);
-}
-
-/* Password */
+/* Password input container */
 .password-input-container {
   position: relative;
   display: flex;
@@ -113,123 +149,230 @@
   color: var(--text-secondary);
   cursor: pointer;
   padding: var(--spacing-sm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-.password-toggle:hover {
-  color: var(--text);
-}
-
-/* Buttons */
-.submit-button,
-.guest-button {
-  padding: var(--spacing-md);
-  border-radius: var(--border-radius);
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
-  transition: opacity var(--transition-speed);
-}
-
-.submit-button {
-  background-color: var(--primary);
-  color: var(--text);
-}
-
-.guest-button {
-  background-color: transparent;
-  border: 1px solid var(--primary);
-  color: var(--text);
-}
-
-.submit-button:hover,
-.guest-button:hover {
-  opacity: 0.9;
-}
-
-.submit-button:disabled,
-.guest-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Loading State */
-.loading {
-  position: relative;
-  color: transparent;
-}
-
-.loading::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 20px;
-  height: 20px;
-  border: 2px solid var(--text);
-  border-top-color: transparent;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: translate(-50%, -50%) rotate(360deg);
-  }
-}
-
-/* Avatar Grid - Keeping your existing styles and adding new hover effects */
+/* Avatar selection grid */
 .avatar-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: var(--spacing-md);
   margin-top: var(--spacing-sm);
 }
 
 .avatar-button {
-  background: var(--background);
-  border: 2px solid var(--text-secondary);
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(0, 145, 255, 0.3);
   border-radius: var(--border-radius);
-  padding: var(--spacing-md);
+  padding: var(--spacing-sm);
   cursor: pointer;
-  transition: all var(--transition-speed);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.avatar-button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    transparent,
+    rgba(0, 145, 255, 0.2)
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.avatar-button:hover::before {
+  opacity: 1;
 }
 
 .avatar-button.selected {
   border-color: var(--primary);
-  background-color: rgba(99, 102, 241, 0.1);
+  box-shadow: 0 0 15px rgba(0, 145, 255, 0.4);
 }
 
 .avatar-image {
   width: 64px;
   height: 64px;
-  transition: transform var(--transition-speed);
+  transition: transform 0.3s ease;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .landing-content {
-    padding: var(--spacing-md);
-  }
+.avatar-button:hover .avatar-image {
+  transform: scale(1.1);
+}
 
-  .avatar-grid {
-    grid-template-columns: repeat(2, 1fr);
+/* Remember Me checkbox */
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.remember-me input[type="checkbox"] {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(0, 145, 255, 0.3);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  position: relative;
+}
+
+.remember-me input[type="checkbox"]:checked {
+  border-color: var(--primary);
+  background: var(--primary);
+}
+
+.remember-me input[type="checkbox"]:checked::before {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--text);
+  font-size: 14px;
+}
+
+/* Action buttons */
+.submit-button,
+.guest-button {
+  width: 100%;
+  padding: var(--spacing-md);
+  border: none;
+  border-radius: var(--border-radius);
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.submit-button {
+  background: var(--primary);
+  color: var(--text);
+}
+
+.submit-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.submit-button:hover::before {
+  left: 100%;
+}
+
+.guest-button {
+  background: transparent;
+  border: 1px solid var(--primary);
+  color: var(--text);
+}
+
+.guest-button:hover {
+  background: rgba(0, 145, 255, 0.1);
+  box-shadow: 0 0 15px rgba(0, 145, 255, 0.3);
+}
+
+/* Error message */
+.error-popup {
+  background: rgba(255, 0, 0, 0.1);
+  border: 1px solid #ff4444;
+  color: #ff4444;
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius);
+  text-align: center;
+  animation: errorShake 0.5s ease;
+}
+
+/* Success overlay */
+.success-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.success-content {
+  background: rgba(0, 0, 0, 0.9);
+  border: 2px solid var(--primary);
+  border-radius: var(--border-radius);
+  padding: calc(var(--spacing-lg) * 2);
+  text-align: center;
+  position: relative;
+}
+
+/* Loading spinner */
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  margin: var(--spacing-md) auto;
+  border: 3px solid transparent;
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Animations */
+@keyframes title-glow {
+  0%,
+  100% {
+    text-shadow: 0 0 20px var(--primary), 0 0 40px var(--primary);
+  }
+  50% {
+    text-shadow: 0 0 30px var(--primary), 0 0 60px var(--primary);
   }
 }
 
-@media (max-width: 480px) {
-  .landing-content {
-    padding: var(--spacing-sm);
+@keyframes border-flow {
+  0%,
+  100% {
+    opacity: 0.5;
   }
-
-  .auth-tabs {
-    flex-direction: column;
+  50% {
+    opacity: 1;
   }
+}
 
-  .avatar-grid {
-    grid-template-columns: repeat(2, 1fr);
+@keyframes errorShake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-10px);
+  }
+  75% {
+    transform: translateX(10px);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }

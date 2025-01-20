@@ -134,12 +134,14 @@ const LandingPage = () => {
 
   return (
     <div className="landing-container">
-      <div className="landing-content">
-        <h1>Welcome to Mini Game Playground</h1>
+      {/* Game Title/Logo */}
+      <div className="landing-title">
+        <h1>Mini Game Playground</h1>
+      </div>
 
-        {/* Login/Signup Toggle Tabs */}
+      <div className="landing-content">
+        {/* Auth Tabs */}
         <div className="auth-tabs">
-          {/* Login */}
           <button
             className={`tab-button ${activeTab === "login" ? "active" : ""}`}
             onClick={() => {
@@ -150,7 +152,6 @@ const LandingPage = () => {
           >
             Login
           </button>
-
           <button
             className={`tab-button ${activeTab === "signup" ? "active" : ""}`}
             onClick={() => {
@@ -159,38 +160,33 @@ const LandingPage = () => {
             }}
             onMouseEnter={() => playSoundEffect("hover")}
           >
-            Sign Up
+            New Character
           </button>
         </div>
 
-        {/* Authentication Form */}
+        {/* Auth Form */}
         <form onSubmit={handleSubmit} className="landing-form">
           {/* Username Field */}
           <div className="form-group">
-            <label htmlFor="username">Username:</label>
             <input
               type="text"
-              id="username"
               className={`form-input ${errors.username ? "input-error" : ""}`}
               value={formData.username}
               onChange={(e) =>
                 setFormData({ ...formData, username: e.target.value })
               }
-              placeholder="Enter username (3-12 characters)"
-              maxLength={12}
+              placeholder="Enter username"
             />
             {errors.username && (
               <span className="error-message">{errors.username}</span>
             )}
           </div>
 
-          {/* Password Field with Visibility Toggle */}
+          {/* Password Field */}
           <div className="form-group">
-            <label htmlFor="password">Password:</label>
             <div className="password-input-container">
               <input
                 type={showPasswords.password ? "text" : "password"}
-                id="password"
                 className={`form-input ${errors.password ? "input-error" : ""}`}
                 value={formData.password}
                 onChange={(e) =>
@@ -207,6 +203,7 @@ const LandingPage = () => {
                   }))
                 }
                 className="password-toggle"
+                onMouseEnter={() => playSoundEffect("hover")}
               >
                 {showPasswords.password ? (
                   <EyeOff size={20} />
@@ -220,16 +217,14 @@ const LandingPage = () => {
             )}
           </div>
 
-          {/* Signup-specific Fields */}
+          {/* Signup Fields */}
           {activeTab === "signup" && (
             <>
-              {/* Confirm Password Field with Visibility Toggle */}
+              {/* Confirm Password */}
               <div className="form-group">
-                <label htmlFor="confirmPassword">Confirm Password:</label>
                 <div className="password-input-container">
                   <input
                     type={showPasswords.confirmPassword ? "text" : "password"}
-                    id="confirmPassword"
                     className={`form-input ${
                       errors.confirmPassword ? "input-error" : ""
                     }`}
@@ -240,7 +235,7 @@ const LandingPage = () => {
                         confirmPassword: e.target.value,
                       })
                     }
-                    placeholder="Confirm your password"
+                    placeholder="Confirm password"
                   />
                   <button
                     type="button"
@@ -251,6 +246,7 @@ const LandingPage = () => {
                       }))
                     }
                     className="password-toggle"
+                    onMouseEnter={() => playSoundEffect("hover")}
                   >
                     {showPasswords.confirmPassword ? (
                       <EyeOff size={20} />
@@ -266,15 +262,14 @@ const LandingPage = () => {
                 )}
               </div>
 
-              {/* Avatar Selection Grid */}
+              {/* Avatar Selection */}
               <div className="form-group">
-                <label>Select Avatar:</label>
+                <label className="form-label">Select Character</label>
                 <div className="avatar-grid">
                   {AVATARS.map((avatar) => (
                     <button
                       key={avatar.id}
                       type="button"
-                      data-type={avatar.type}
                       className={`avatar-button ${
                         formData.avatar === avatar.id ? "selected" : ""
                       }`}
@@ -299,66 +294,81 @@ const LandingPage = () => {
             </>
           )}
 
-          {/* Remember Me Checkbox */}
-          <div className="form-group remember-me">
-            <label>
-              <input
-                type="checkbox"
-                checked={formData.rememberMe}
-                onChange={(e) =>
-                  setFormData({ ...formData, rememberMe: e.target.checked })
-                }
-              />
-              Remember me
-            </label>
+          {/* Remember Me */}
+          <div className="remember-me">
+            <input
+              type="checkbox"
+              id="rememberMe"
+              checked={formData.rememberMe}
+              onChange={(e) =>
+                setFormData({ ...formData, rememberMe: e.target.checked })
+              }
+            />
+            <label htmlFor="rememberMe">Remember Me</label>
           </div>
-
-          {/* Error Messages */}
-          {errors.submit && (
-            <div className="error-message submit-error">{errors.submit}</div>
-          )}
 
           {/* Submit Button */}
           <button
             type="submit"
-            className={`submit-button ${isLoading ? "loading" : ""}`}
+            className="submit-button"
             disabled={isLoading}
             onMouseEnter={() => playSoundEffect("hover")}
           >
             {isLoading
-              ? "Please wait..."
+              ? "Loading..."
               : activeTab === "login"
               ? "Login"
-              : "Sign Up"}
+              : "Create Character"}
           </button>
 
-          {/* Guest Access Button */}
+          {/* Guest Button */}
           <button
             type="button"
             className="guest-button"
-            onClick={() => {
-              playSoundEffect("click");
-              handleGuestAccess();
-            }}
+            onClick={handleGuestAccess}
             onMouseEnter={() => playSoundEffect("hover")}
             disabled={isLoading}
           >
-            Continue as Guest
+            Quick Play
           </button>
+
+          {/* Error Messages */}
+          {errors.submit && (
+            <div className="error-popup">
+              <span>{errors.submit}</span>
+            </div>
+          )}
         </form>
       </div>
 
       {/* Success Message Overlay */}
       {showSuccess && (
-        <SuccessMessage
-          message={`Welcome to Mini Game Playground! ${
-            activeTab === "login"
-              ? "Welcome back!"
-              : "Account created successfully!"
-          }`}
-          onClose={() => setShowSuccess(false)}
-        />
+        <div className="success-overlay">
+          <div className="success-content">
+            <h2>Welcome, Adventurer!</h2>
+            <p>
+              {activeTab === "login"
+                ? "Welcome back to the arcade!"
+                : "Your character has been created!"}
+            </p>
+            <div className="loading-spinner"></div>
+          </div>
+        </div>
       )}
+
+      {/* Add particle effects specific to landing page */}
+      <div className="login-particles">
+        {Array.from({ length: 20 }).map((_, index) => (
+          <div
+            key={index}
+            className="login-particle"
+            style={{
+              "--delay": `${Math.random() * 5}s`,
+              "--position": `${Math.random() * 100}%`,
+            }}
+          ></div>
+        ))}
+      </div>
     </div>
   );
 };
