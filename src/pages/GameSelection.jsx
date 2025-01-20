@@ -5,6 +5,7 @@ import { apiService } from "../utils/apiService";
 import API_URLS from "../utils/apiUrls";
 import Loading from "../components/Loading";
 import { useSoundSystem } from "../context/SoundContext";
+import ArcadePlayButton from "../components/ArcadePlayButton";
 
 const GameSelection = () => {
   const { playSoundEffect } = useSoundSystem();
@@ -111,36 +112,44 @@ const GameSelection = () => {
                 alt={selectedGame.title}
               />
             </div>
-            <div className="preview-info">
-              <h2>{selectedGame.title}</h2>
-              <p className="game-description">{selectedGame.description}</p>
 
-              {selectedGame.controls && selectedGame.controls.length > 0 && (
-                <div className="game-controls">
-                  <h3>Controls:</h3>
-                  <ul>
-                    {selectedGame.controls.map((control, index) => (
-                      <li key={index}>
-                        <span className="control-key">{control.key}</span>:{" "}
-                        {control.action}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+            <div className="preview-info">
+              <div className="preview-info-content">
+                <h2>{selectedGame.title}</h2>
+                <p className="game-description">{selectedGame.description}</p>
+
+                {selectedGame.controls && selectedGame.controls.length > 0 && (
+                  <div className="game-controls">
+                    <h3>Controls:</h3>
+                    <ul>
+                      {selectedGame.controls.map((control, index) => (
+                        <li key={index}>
+                          <span className="control-key">{control.key}</span>:{" "}
+                          {control.action}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {selectedGame.rules && selectedGame.rules.length > 0 && (
+                  <div className="game-rules">
+                    <h3>Rules:</h3>
+                    <ul>
+                      {selectedGame.rules.map((rule, index) => (
+                        <li key={index}>{rule}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
 
               {/* Play Button */}
               {selectedGame.enabled && (
-                <button
-                  className="play-button"
-                  onClick={() => {
-                    playSoundEffect("click");
-                    handlePlayGame();
-                  }}
-                  onMouseEnter={() => playSoundEffect("hover")}
-                >
-                  Play Now
-                </button>
+                <ArcadePlayButton
+                  onClick={handlePlayGame}
+                  isDisabled={!selectedGame.enabled}
+                />
               )}
             </div>
           </div>

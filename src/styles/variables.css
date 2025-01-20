@@ -18,6 +18,32 @@
   --transition-speed: 0.3s;
 }
 
+/* Global scrollbar styles */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary) rgba(0, 0, 0, 0.3);
+}
+
+/* Webkit scrollbar styles */
+*::-webkit-scrollbar {
+  width: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--primary);
+  border-radius: 3px;
+}
+
+/* When user hovers over scrollable area */
+*:hover::-webkit-scrollbar-thumb {
+  background-color: var(--primary);
+}
+
 /* For future use with the gaming font */
 @font-face {
   font-family: "Press Start 2P";

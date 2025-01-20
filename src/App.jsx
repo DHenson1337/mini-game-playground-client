@@ -15,6 +15,7 @@ import BackgroundEffects from "./components/BackgroundEffects";
 import { AnimatePresence } from "framer-motion";
 import PageTransition from "./components/PageTransition";
 import GameTransition from "./components/GameTransition";
+import Credits from "./pages/Credits";
 // import TestAuth from "./TestAuth"; For testing
 // import TestLogin from "./TestLogin"; //Temp for Testing
 
@@ -72,6 +73,18 @@ function App() {
                   <ProtectedRoute>
                     <PageTransition>
                       <Leaderboard />
+                    </PageTransition>
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Route for Credits Page */}
+              <Route
+                path="/credits"
+                element={
+                  <ProtectedRoute>
+                    <PageTransition>
+                      <Credits />
                     </PageTransition>
                   </ProtectedRoute>
                 }
