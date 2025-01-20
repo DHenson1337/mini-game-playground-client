@@ -75,8 +75,10 @@ const LandingPage = () => {
   // Handle form submission (Login/Signup)
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
-
+    if (!validateForm()) {
+      playSoundEffect("error");
+      return;
+    }
     setIsLoading(true);
     try {
       let authResponse;
@@ -99,7 +101,7 @@ const LandingPage = () => {
 
       // Update global user state
       await login(authResponse.user);
-
+      playSoundEffect("success");
       setShowSuccess(true);
 
       // Navigate to the attempted page or default to /games
@@ -107,6 +109,7 @@ const LandingPage = () => {
       setTimeout(() => navigate(from), 3000);
     } catch (error) {
       setErrors({ submit: error.message });
+      playSoundEffect("error");
     } finally {
       setIsLoading(false);
     }

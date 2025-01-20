@@ -4,9 +4,11 @@ import { AVATARS, getAvatarImage } from "../utils/avatarUtils";
 import { Eye, EyeOff } from "lucide-react";
 import API_URLS from "../utils/apiUrls";
 import "./styles/ProfilePage.css";
+import { useSoundSystem } from "../context/SoundContext";
 
 const ProfilePage = () => {
   const { user, updateUser } = useUser();
+  const { playSoundEffect } = useSoundSystem();
   const [formData, setFormData] = useState({
     newUsername: "",
     avatar: "",
@@ -54,11 +56,13 @@ const ProfilePage = () => {
     ) {
       if (!formData.currentPassword) {
         setError("Current password is required to change password");
+        playSoundEffect("error");
         setIsLoading(false);
         return;
       }
       if (formData.newPassword !== formData.confirmNewPassword) {
         setError("New passwords do not match");
+        playSoundEffect("error");
         setIsLoading(false);
         return;
       }
@@ -92,6 +96,7 @@ const ProfilePage = () => {
       const updatedUser = await response.json();
       updateUser(updatedUser);
       setSuccess("Profile updated successfully!");
+      playSoundEffect("success");
 
       // Clear password fields after successful update
       setFormData((prev) => ({
@@ -102,6 +107,7 @@ const ProfilePage = () => {
       }));
     } catch (err) {
       setError(err.message);
+      playSoundEffect("error");
     } finally {
       setIsLoading(false);
     }
@@ -113,11 +119,13 @@ const ProfilePage = () => {
 
     if (value.length > 12) {
       setError("Username cannot exceed 12 characters");
+      playSoundEffect("error");
       return;
     }
 
     if (value && !/^[a-zA-Z0-9_]+$/.test(value)) {
       setError("Username can only contain letters, numbers, and underscores");
+      playSoundEffect("error");
       return;
     }
 

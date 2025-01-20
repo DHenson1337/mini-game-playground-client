@@ -1,8 +1,16 @@
 // src/utils/gameImages.js
 const gameImages = {
-  "apple-catcher": {
-    card: "/assets/games/apple-catcher/card.png",
-    preview: "/assets/games/apple-catcher/preview.png",
+  "tetris-classic": {
+    card: "/assets/games/tetris/tetris-thumb.png",
+    preview: "/assets/games/tetris/preview.gif",
+  },
+  "tic-tac-toe": {
+    card: "/assets/games/tic-tac-toe/tictactoe-thumb.png",
+    preview: "/assets/games/tic-tac-toe/preview.gif",
+  },
+  snake: {
+    card: "/assets/games/snake/snake-thumb.png",
+    preview: "/assets/games/snake/preview.gif",
   },
   "coming-soon": {
     card: "/assets/placeholders/coming-soon.png",

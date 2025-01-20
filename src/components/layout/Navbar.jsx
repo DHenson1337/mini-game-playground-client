@@ -1,4 +1,3 @@
-// components/layout/Navbar.jsx
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useUser } from "../../context/UserContext";
@@ -6,33 +5,34 @@ import "./styles/Navbar.css";
 import { AVATAR_IMAGES, getAvatarImage } from "../../utils/avatarUtils";
 import authService from "../../services/authService";
 import SoundControls from "../SoundControls";
+import { useSoundSystem } from "../../context/SoundContext";
 
 const Navbar = () => {
-  const [isAudioEnabled, setIsAudioEnabled] = useState(true);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
   const { user, logout } = useUser();
-
-  const toggleAudio = () => {
-    setIsAudioEnabled(!isAudioEnabled);
-  };
+  const { playSoundEffect } = useSoundSystem();
 
   const toggleDropdown = () => {
+    playSoundEffect("click");
     setIsDropdownOpen(!isDropdownOpen);
   };
 
   const handleLogout = async () => {
     try {
+      playSoundEffect("click");
       await authService.logout();
       await logout(); // Clear user context
       navigate("/");
     } catch (error) {
       console.error("Logout failed:", error);
+      playSoundEffect("error");
     }
   };
 
   const handleNavigation = (path, e) => {
     e.preventDefault();
+    playSoundEffect("click");
     navigate(path);
   };
 
@@ -48,42 +48,43 @@ const Navbar = () => {
     return () => document.removeEventListener("click", handleClickOutside);
   }, [isDropdownOpen]);
 
+  // NavLink component for consistent styling and behavior
+  const NavLink = ({ to, children, className = "" }) => (
+    <a
+      href="#"
+      onClick={(e) => handleNavigation(to, e)}
+      className={className}
+      onMouseEnter={() => playSoundEffect("hover")}
+    >
+      {children}
+    </a>
+  );
+
   return (
     <nav className="navbar">
       {/* Left side */}
       <div className="nav-left">
-        <a
-          href="#"
-          onClick={(e) => handleNavigation("/games", e)}
-          className="logo"
-        >
+        <NavLink to="/games" className="logo">
           <img
             src="/assets/logos/miniGamePlayground.png"
             alt="MiniGame Playground"
             className="logo-image"
           />
-        </a>
+        </NavLink>
         <SoundControls />
       </div>
 
       {/* Center */}
       <div className="nav-center">
-        <a href="#" onClick={(e) => handleNavigation("/games", e)}>
-          Games
-        </a>
-        <a href="#" onClick={(e) => handleNavigation("/leaderboard", e)}>
-          Leaderboard
-        </a>
-        <a href="#" onClick={(e) => handleNavigation("/credits", e)}>
-          Credits
-        </a>
-        <a href="#" onClick={(e) => handleNavigation("/suggestions", e)}>
-          Suggestions
-        </a>
+        <NavLink to="/games">Games</NavLink>
+        <NavLink to="/leaderboard">Leaderboard</NavLink>
+        <NavLink to="/credits">Credits</NavLink>
+        <NavLink to="/suggestions">Suggestions</NavLink>
         <a
           href="https://dhenson1337.github.io/dev-portfolio/"
           target="_blank"
           rel="noopener noreferrer"
+          onMouseEnter={() => playSoundEffect("hover")}
         >
           About Me
         </a>
@@ -98,6 +99,7 @@ const Navbar = () => {
               alt={`${user.username}'s Avatar`}
               className="user-avatar"
               onClick={toggleDropdown}
+              onMouseEnter={() => playSoundEffect("hover")}
             />
             {isDropdownOpen && (
               <div className="dropdown-menu">
@@ -109,10 +111,12 @@ const Navbar = () => {
                   />
                   <span className="dropdown-username">{user.username}</span>
                 </div>
-                <a href="#" onClick={(e) => handleNavigation("/profile", e)}>
-                  Account Settings
-                </a>
-                <button onClick={handleLogout} className="logout-button">
+                <NavLink to="/profile">Account Settings</NavLink>
+                <button
+                  onClick={handleLogout}
+                  className="logout-button"
+                  onMouseEnter={() => playSoundEffect("hover")}
+                >
                   Logout
                 </button>
               </div>

@@ -5,11 +5,26 @@
   color: var(--text);
 }
 
+/* Enhanced Title */
 .selection-title {
   text-align: center;
   margin-bottom: var(--spacing-lg);
-  font-size: 2rem;
+  font-size: 2.5rem;
   color: var(--text);
+  text-shadow: 0 0 10px var(--primary);
+  position: relative;
+  animation: titleGlow 3s ease-in-out infinite;
+}
+
+.selection-title::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
 }
 
 /* Game Grid */
@@ -22,57 +37,116 @@
   margin: 0 auto;
 }
 
+/* New Enhanced Game Card Styles */
 .game-card {
   aspect-ratio: 1;
   border: 2px solid var(--text-secondary);
   border-radius: var(--border-radius);
   overflow: hidden;
   cursor: pointer;
-  transition: transform var(--transition-speed),
-    border-color var(--transition-speed);
+  position: relative;
   background: rgba(255, 255, 255, 0.05);
+  transition: transform 0.6s cubic-bezier(0.2, 1, 0.3, 1);
+  transform-style: preserve-3d;
+  perspective: 1000px;
 }
 
 .game-card:hover:not(.disabled) {
-  transform: translateY(-4px);
+  transform: translateY(-4px) rotateX(5deg) rotateY(5deg);
   border-color: var(--primary);
 }
 
-.game-card.selected {
-  border-color: var(--primary);
-  box-shadow: 0 0 10px var(--primary);
+/* Glowing border effect */
+.game-card::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(
+    45deg,
+    var(--primary),
+    rgba(99, 102, 241, 0.5),
+    var(--primary)
+  );
+  border-radius: var(--border-radius);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+  filter: blur(8px);
 }
 
-.game-card.disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+.game-card:hover:not(.disabled)::before {
+  opacity: 1;
+  animation: borderGlow 2s linear infinite;
+}
+
+/* Press Start pulsing effect */
+.game-card.selected::after {
+  content: "Play Now!";
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--text);
+  font-family: monospace;
+  font-weight: bold;
+  text-shadow: 0 0 10px var(--primary);
+  animation: pulse 1.5s ease-in-out infinite;
+  pointer-events: none;
 }
 
 .game-card-content {
   height: 100%;
   display: flex;
   flex-direction: column;
+  position: relative;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.8);
+  transition: transform 0.3s ease;
 }
 
 .game-thumbnail {
   width: 100%;
   height: 70%;
   object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.game-card:hover:not(.disabled) .game-thumbnail {
+  transform: scale(1.05);
 }
 
 .game-card-info {
   padding: var(--spacing-sm);
   text-align: center;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.7);
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+/* Hover state info panel lift */
+.game-card:hover:not(.disabled) .game-card-info {
+  transform: translateY(-4px);
+  background: rgba(0, 0, 0, 0.9);
 }
 
 .game-card-info h3 {
   margin: 0;
   font-size: 1.1rem;
+  transition: color 0.3s ease;
+}
+
+.game-card:hover:not(.disabled) .game-card-info h3 {
+  color: var(--primary);
+}
+
+/* Disabled state styles */
+.game-card.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  filter: grayscale(0.5);
 }
 
 .coming-soon {
@@ -81,32 +155,74 @@
   margin-top: var(--spacing-sm);
 }
 
-/* Game Preview Section */
+/* Enhanced Preview Section */
 .game-preview {
   margin-top: var(--spacing-lg);
   padding: var(--spacing-lg);
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.03);
   border-radius: var(--border-radius);
   max-width: 1200px;
   margin: var(--spacing-lg) auto;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.game-preview::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(99, 102, 241, 0.1),
+    transparent
+  );
+  pointer-events: none;
 }
 
 .preview-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--spacing-lg);
+  position: relative;
+  z-index: 1;
+}
+
+.preview-image {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--border-radius);
 }
 
 .preview-image img {
   width: 100%;
   border-radius: var(--border-radius);
-  border: 2px solid var(--text-secondary);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.preview-image:hover img {
+  transform: scale(1.05);
 }
 
 .preview-info {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: var(--border-radius);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.preview-info h2 {
+  color: var(--primary);
+  margin-bottom: var(--spacing-md);
+  font-size: 1.8rem;
+  text-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
 }
 
 .game-controls {
@@ -154,18 +270,36 @@
   gap: var(--spacing-md);
 }
 
-.loading-spinner {
-  width: 50px;
-  height: 50px;
-  border: 3px solid var(--text-secondary);
-  border-top: 3px solid var(--primary);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+/* Animations */
+@keyframes borderGlow {
+  0%,
+  100% {
+    filter: blur(8px) brightness(1);
+  }
+  50% {
+    filter: blur(8px) brightness(1.3);
+  }
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: translateX(-50%) scale(0.95);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.05);
+  }
+}
+
+@keyframes titleGlow {
+  0%,
+  100% {
+    text-shadow: 0 0 10px var(--primary);
+  }
+  50% {
+    text-shadow: 0 0 20px var(--primary), 0 0 30px var(--primary);
   }
 }
 

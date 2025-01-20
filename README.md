@@ -73,10 +73,38 @@ Tetris line success -- success.wav by grunz -- https://freesound.org/s/109662/ -
 
 Tetris BGM - Plastic Adrenaline (Loop).mp3 by Adam_Zero -- https://freesound.org/s/678988/ -- License: Attribution 4.0
 
+GameOver - Game Over 04.wav by MATRIXXX\_ -- https://freesound.org/s/365782/ -- License: Creative Commons 0
+
+Move - Arcade UI Move Cursor by plasterbrain -- https://freesound.org/s/464903/ -- License: Creative Commons 0
+
+Preview Image:
+Title: Tetris Artwork
+Creator: Designer/Artist's Name on Dribbble
+Platform: Dribbble
+URL: Dribbble Page (https://dribbble.com/shots/9239848-Tetris/attachments/1283484?mode=media)
+
 ==============================================================================================
 Tic Tac Toe BGM: Steady Hand (Loop).mp3 by Adam_Zero -- https://freesound.org/s/678991/ -- License: Attribution 4.0
 
+Preview img - GIF Title: Cereal Tic Tac Toe
+Creator: Unknown (Source: Tenor)
+Link: [https://tenor.com/view/cereal-tic-tac-toe-gif-9950777](https://tenor.com/view/cereal-tic-tac-toe-gif-9950777)
+
 ==============================================================================
+
+Snake Game:
+
+BGM: "Snake Charmer" by Steve Oxen
+Licensed by Fesliyan Studios
+https://www.fesliyanstudios.com/
+
+Preview img:
+Title: Quit Playing Games with Your Cravings
+Creator: Akanksha Jain
+Platform: Dribbble
+URL: https://dribbble.com/shots/14968252-Quit-playing-games-with-your-cravings/attachments/6687262?mode=media
+
+============================================================================
 
 Tic Tac Toe Game TODO:
 // At the top of your component, add these comments for assets:
@@ -94,3 +122,9 @@ Tic Tac Toe Game TODO:
 - - thumb.png: 200x200 static thumbnail for game selection
 - - preview.gif: 400x300 animated preview showing gameplay
     \*/
+
+    Add sound effects to all games.
+
+    work on the logic for Tic Tac Toe - AI difficulty (maybe multiplayer)
+
+    Work on the logic for snake game - More elements, power ups, events, etc

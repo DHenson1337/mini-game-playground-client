@@ -6,6 +6,7 @@ import { getAvatarImage } from "../utils/avatarUtils";
 import { apiService } from "../utils/apiService";
 import socketClient from "../services/socketClient";
 import Loading from "../components/Loading";
+import { useSoundSystem } from "../context/SoundContext";
 import "./styles/Leaderboard.css";
 
 const SCORES_PER_PAGE = 10;
@@ -21,6 +22,7 @@ const Leaderboard = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedGameTitle, setSelectedGameTitle] = useState("Tetris Classic");
   const [lastUpdate, setLastUpdate] = useState(null); // For showing update status
+  const { playSoundEffect } = useSoundSystem();
 
   // Fetch games
   useEffect(() => {
@@ -107,6 +109,7 @@ const Leaderboard = () => {
   const handleGameChange = (e) => {
     const gameId = e.target.value;
     setSelectedGame(gameId);
+    playSoundEffect("click");
     const selectedGame = games.find((game) => game.gameId === gameId);
     if (selectedGame) {
       setSelectedGameTitle(selectedGame.title);
@@ -116,14 +119,16 @@ const Leaderboard = () => {
 
   const handlePrevPage = () => {
     setCurrentPage((prev) => Math.max(1, prev - 1));
+    playSoundEffect("click");
   };
 
   const handleNextPage = () => {
+    playSoundEffect("click");
     const maxPages = Math.max(1, Math.ceil(allScores.length / SCORES_PER_PAGE));
     setCurrentPage((prev) => Math.min(maxPages, prev + 1));
   };
 
-  // Loading spinner component
+  // Loading spinner component (I have one now so I can like comment out this code. . .but I choose to write this instead lel)
   const LoadingSpinner = () => (
     <div className="loading-container">
       <div className="loading-spinner"></div>
