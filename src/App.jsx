@@ -12,6 +12,9 @@ import ProfilePage from "./pages/ProfilePage";
 import { SoundProvider } from "./context/SoundContext";
 import PageMusic from "./components/PageMusic";
 import BackgroundEffects from "./components/BackgroundEffects";
+import { AnimatePresence } from "framer-motion";
+import PageTransition from "./components/PageTransition";
+import GameTransition from "./components/GameTransition";
 // import TestAuth from "./TestAuth"; For testing
 // import TestLogin from "./TestLogin"; //Temp for Testing
 
@@ -21,53 +24,76 @@ function App() {
       <SoundProvider>
         <BackgroundEffects />
         <PageMusic />
-        <Routes>
-          {/* Landing page is separate from main layout */}
-          <Route path="/" element={<LandingPage />} />
-
-          {/* For testing */}
-          {/* <Route path="/test" element={<TestLogin />} /> */}
-          {/* <Route path="/test" element={<TestAuth />} /> */}
-
-          {/* All other pages are protected */}
-          <Route element={<Layout />}>
+        <AnimatePresence>
+          <Routes>
+            {/* Landing page is separate from main layout */}
             <Route
-              path="/games"
+              path="/"
               element={
-                <ProtectedRoute>
-                  <GameSelection />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/games/:gameId"
-              element={
-                <ProtectedRoute>
-                  <GameView />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/leaderboard"
-              element={
-                <ProtectedRoute>
-                  <Leaderboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute>
-                  <ProfilePage />
-                </ProtectedRoute>
+                <PageTransition>
+                  <LandingPage />
+                </PageTransition>
               }
             />
 
-            {/* Catch any unknown routes */}
-            <Route path="*" element={<NotFound />} />
-          </Route>
-        </Routes>
+            {/* For testing */}
+            {/* <Route path="/test" element={<TestLogin />} /> */}
+            {/* <Route path="/test" element={<TestAuth />} /> */}
+
+            {/* All other pages are protected */}
+            {/* Route for Game Selection page */}
+            <Route element={<Layout />}>
+              <Route
+                path="/games"
+                element={
+                  <ProtectedRoute>
+                    <PageTransition>
+                      <GameSelection />
+                    </PageTransition>
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Route for Games */}
+              <Route
+                path="/games/:gameId"
+                element={
+                  <ProtectedRoute>
+                    <GameTransition>
+                      <GameView />
+                    </GameTransition>
+                  </ProtectedRoute>
+                }
+              />
+              {/* Route for leaderboard page */}
+              <Route
+                path="/leaderboard"
+                element={
+                  <ProtectedRoute>
+                    <PageTransition>
+                      <Leaderboard />
+                    </PageTransition>
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Route for Profile page settings */}
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <PageTransition>
+                      <ProfilePage />
+                    </PageTransition>
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Catch any unknown routes */}
+              <Route path="*" element={<NotFound />} />
+            </Route>
+          </Routes>
+        </AnimatePresence>
       </SoundProvider>
     </UserProvider>
   );
