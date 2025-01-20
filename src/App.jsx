@@ -16,6 +16,7 @@ import { AnimatePresence } from "framer-motion";
 import PageTransition from "./components/PageTransition";
 import GameTransition from "./components/GameTransition";
 import Credits from "./pages/Credits";
+import Achievements from "./pages/Achievements";
 // import TestAuth from "./TestAuth"; For testing
 // import TestLogin from "./TestLogin"; //Temp for Testing
 
@@ -85,6 +86,18 @@ function App() {
                   <ProtectedRoute>
                     <PageTransition>
                       <Credits />
+                    </PageTransition>
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Achievements page */}
+              <Route
+                path="/achievements"
+                element={
+                  <ProtectedRoute>
+                    <PageTransition>
+                      <Achievements />
                     </PageTransition>
                   </ProtectedRoute>
                 }

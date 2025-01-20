@@ -62,6 +62,13 @@ const Credits = () => {
             <a href="https://freesound.org/s/728588/">Menu_loop</a> by naomuhibu
             -- License: Creative Commons 0
           </li>
+          <li>
+            <strong>Landing Page Background Music:</strong>
+            <a href="https://freesound.org/s/642309/">
+              Light Mister - Intro
+            </a>{" "}
+            by LightMister -- License: Attribution 4.0
+          </li>
         </ul>
       </section>
 

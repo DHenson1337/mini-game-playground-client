@@ -79,7 +79,7 @@ const Navbar = () => {
         <NavLink to="/games">Games</NavLink>
         <NavLink to="/leaderboard">Leaderboard</NavLink>
         <NavLink to="/credits">Credits</NavLink>
-        <NavLink to="/suggestions">Suggestions</NavLink>
+        <NavLink to="/achievements">Achievements</NavLink>
         <a
           href="https://dhenson1337.github.io/dev-portfolio/"
           target="_blank"
