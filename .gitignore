@@ -24,3 +24,7 @@ dist-ssr
 *.sw?
 .env
 .env.local
+
+# Environment variables
+.env
+.env.production

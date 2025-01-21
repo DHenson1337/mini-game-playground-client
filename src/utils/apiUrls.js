@@ -1,5 +1,9 @@
 // const BASE_URL = "http://localhost:5000/api";
-const BASE_URL = "https://mini-game-playground-server.onrender.com/api";
+// const BASE_URL = "https://mini-game-playground-server.onrender.com/api";
+
+const BASE_URL = import.meta.env.VITE_BACKEND_URL
+  ? `${import.meta.env.VITE_BACKEND_URL}/api`
+  : "http://localhost:5000/api";
 
 const API_URLS = {
   GAMES: `${BASE_URL}/games`,
