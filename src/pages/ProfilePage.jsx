@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
 import { useUser } from "../context/UserContext";
 import { AVATARS, getAvatarImage } from "../utils/avatarUtils";
 import { Eye, EyeOff } from "lucide-react";
@@ -7,8 +8,12 @@ import "./styles/ProfilePage.css";
 import { useSoundSystem } from "../context/SoundContext";
 
 const ProfilePage = () => {
-  const { user, updateUser } = useUser();
+  const { user, updateUser, logout } = useUser();
+  const navigate = useNavigate();
   const { playSoundEffect } = useSoundSystem();
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deletePassword, setDeletePassword] = useState("");
+  const [showDeletePassword, setShowDeletePassword] = useState(false);
   const [formData, setFormData] = useState({
     newUsername: "",
     avatar: "",
@@ -40,6 +45,40 @@ const ProfilePage = () => {
       ...prev,
       [field]: !prev[field],
     }));
+  };
+
+  // Delete handler
+  const handleDeleteAccount = async (e) => {
+    e.preventDefault();
+    setError(null);
+    setIsLoading(true);
+
+    try {
+      const response = await fetch(`${API_URLS.USERS}/${user.username}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          currentPassword: deletePassword,
+        }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.message || "Failed to delete account");
+      }
+
+      playSoundEffect("success");
+      await logout();
+      navigate("/");
+    } catch (err) {
+      setError(err.message);
+      playSoundEffect("error");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -130,6 +169,84 @@ const ProfilePage = () => {
     }
 
     setFormData((prev) => ({ ...prev, newUsername: value }));
+  };
+
+  // Render delete.
+  const renderDeleteSection = () => {
+    if (user?.isGuest) return null;
+
+    return (
+      <div className="form-section delete-section">
+        <h2 className="section-title">Delete Account</h2>
+        <p className="section-description danger-text">
+          Warning: This action cannot be undone. All your data, including scores
+          and achievements, will be permanently deleted.
+        </p>
+
+        {!showDeleteConfirm ? (
+          <button
+            onClick={() => {
+              setShowDeleteConfirm(true);
+              playSoundEffect("click");
+            }}
+            className="delete-button"
+            type="button"
+          >
+            Delete Account
+          </button>
+        ) : (
+          <form onSubmit={handleDeleteAccount} className="delete-confirm-form">
+            <div className="form-group">
+              <label className="form-label">
+                Enter your password to confirm
+              </label>
+              <div className="password-input-container">
+                <input
+                  type={showDeletePassword ? "text" : "password"}
+                  value={deletePassword}
+                  onChange={(e) => setDeletePassword(e.target.value)}
+                  className="form-input"
+                  placeholder="Enter password to confirm"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowDeletePassword(!showDeletePassword)}
+                  className="password-toggle"
+                >
+                  {showDeletePassword ? (
+                    <EyeOff size={20} />
+                  ) : (
+                    <Eye size={20} />
+                  )}
+                </button>
+              </div>
+            </div>
+
+            <div className="delete-actions">
+              <button
+                type="submit"
+                className="confirm-delete-button"
+                disabled={isLoading}
+              >
+                {isLoading ? "Deleting..." : "Confirm Delete"}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowDeleteConfirm(false);
+                  setDeletePassword("");
+                  playSoundEffect("click");
+                }}
+                className="cancel-delete-button"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        )}
+      </div>
+    );
   };
 
   if (!user) return null;
@@ -317,6 +434,8 @@ const ProfilePage = () => {
             {isLoading ? "Saving Changes..." : "Save Changes"}
           </button>
         </form>
+        {/* Delete Account */}
+        {renderDeleteSection()}
       </div>
     </div>
   );

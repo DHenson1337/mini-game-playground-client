@@ -200,6 +200,82 @@
   color: var(--text);
 }
 
+.delete-section {
+  margin-top: var(--spacing-xl);
+  border: 1px solid rgba(255, 0, 0, 0.2);
+  background: rgba(255, 0, 0, 0.05);
+}
+
+.danger-text {
+  color: #ff4444;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.delete-button {
+  width: 100%;
+  padding: var(--spacing-md);
+  background-color: transparent;
+  border: 2px solid #ff4444;
+  color: #ff4444;
+  border-radius: var(--border-radius);
+  font-weight: bold;
+  cursor: pointer;
+  transition: all var(--transition-speed);
+}
+
+.delete-button:hover {
+  background-color: rgba(255, 68, 68, 0.1);
+  transform: translateY(-2px);
+}
+
+.delete-confirm-form {
+  margin-top: var(--spacing-md);
+}
+
+.delete-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-md);
+}
+
+.confirm-delete-button,
+.cancel-delete-button {
+  flex: 1;
+  padding: var(--spacing-md);
+  border: none;
+  border-radius: var(--border-radius);
+  font-weight: bold;
+  cursor: pointer;
+  transition: all var(--transition-speed);
+}
+
+.confirm-delete-button {
+  background-color: #ff4444;
+  color: white;
+}
+
+.confirm-delete-button:hover:not(:disabled) {
+  background-color: #ff6666;
+  transform: translateY(-2px);
+}
+
+.confirm-delete-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cancel-delete-button {
+  background-color: var(--text-secondary);
+  color: var(--text);
+}
+
+.cancel-delete-button:hover {
+  background-color: var(--text);
+  color: var(--background);
+  transform: translateY(-2px);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .avatar-grid {
