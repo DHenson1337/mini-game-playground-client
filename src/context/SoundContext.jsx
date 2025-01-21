@@ -4,10 +4,10 @@ import React, {
   useState,
   useCallback,
   useEffect,
+  useRef,
 } from "react";
 import useSound from "use-sound";
 
-// Sound effects (not BGM)
 const SOUNDS = {
   click: "/assets/sounds/click.wav",
   hover: "/assets/sounds/hover.ogg",
@@ -28,11 +28,10 @@ export function SoundProvider({ children }) {
     return stored ? JSON.parse(stored) : 0.5;
   });
 
-  const [currentBgmPath, setCurrentBgmPath] = useState(
-    "/assets/sounds/landing-bgm.mp3"
-  );
+  const [currentBgmPath, setCurrentBgmPath] = useState(null);
+  const audioContextRef = useRef(null);
+  const bgmPlayerRef = useRef(null);
 
-  // Sound effects hooks
   const [playClick] = useSound(SOUNDS.click, {
     volume: volume * 0.5,
     disabled: isMuted,
@@ -50,29 +49,133 @@ export function SoundProvider({ children }) {
     disabled: isMuted,
   });
 
-  // BGM hook
-  const [playBgmSound, { stop: stopBgmSound }] = useSound(currentBgmPath, {
-    volume: volume * 0.3,
-    loop: true,
-    disabled: isMuted,
-  });
+  const initAudioContext = useCallback(() => {
+    if (!audioContextRef.current) {
+      audioContextRef.current = new (window.AudioContext ||
+        window.webkitAudioContext)();
+    }
+    if (audioContextRef.current.state === "suspended") {
+      audioContextRef.current.resume();
+    }
+  }, []);
 
-  // Toggle mute
+  useEffect(() => {
+    const handleInteraction = () => {
+      initAudioContext();
+    };
+
+    window.addEventListener("click", handleInteraction, { once: true });
+    window.addEventListener("touchstart", handleInteraction, { once: true });
+
+    return () => {
+      window.removeEventListener("click", handleInteraction);
+      window.removeEventListener("touchstart", handleInteraction);
+    };
+  }, [initAudioContext]);
+
+  const setupBgmPlayer = useCallback(
+    async (bgmPath) => {
+      if (!audioContextRef.current) return;
+
+      try {
+        if (bgmPlayerRef.current) {
+          bgmPlayerRef.current.stop();
+          bgmPlayerRef.current = null;
+        }
+
+        const response = await fetch(bgmPath);
+        const arrayBuffer = await response.arrayBuffer();
+        const audioBuffer = await audioContextRef.current.decodeAudioData(
+          arrayBuffer
+        );
+
+        const player = {
+          source: null,
+          gainNode: audioContextRef.current.createGain(),
+          isPlaying: false,
+          start() {
+            if (this.isPlaying) return;
+            this.source = audioContextRef.current.createBufferSource();
+            this.source.buffer = audioBuffer;
+            this.source.loop = true;
+            this.source.connect(this.gainNode);
+            this.gainNode.connect(audioContextRef.current.destination);
+            this.gainNode.gain.value = volume * 0.3;
+            this.source.start(0);
+            this.isPlaying = true;
+          },
+          stop() {
+            if (!this.isPlaying) return;
+            if (this.source) {
+              this.source.stop();
+              this.source.disconnect();
+            }
+            this.isPlaying = false;
+          },
+          updateVolume(newVolume) {
+            this.gainNode.gain.value = newVolume * 0.3;
+          },
+        };
+
+        bgmPlayerRef.current = player;
+        return player;
+      } catch (error) {
+        console.error("Error setting up BGM:", error);
+      }
+    },
+    [volume]
+  );
+
+  const playBGM = useCallback(
+    async (bgmPath) => {
+      if (!bgmPath || isMuted) return;
+
+      try {
+        initAudioContext();
+        const player = await setupBgmPlayer(bgmPath);
+        if (player) {
+          player.start();
+          setCurrentBgmPath(bgmPath);
+        }
+      } catch (error) {
+        console.error("Error playing BGM:", error);
+      }
+    },
+    [isMuted, setupBgmPlayer, initAudioContext]
+  );
+
+  const stopBGM = useCallback(() => {
+    if (bgmPlayerRef.current) {
+      bgmPlayerRef.current.stop();
+      setCurrentBgmPath(null);
+    }
+  }, []);
+
   const toggleMute = useCallback(() => {
     setIsMuted((prev) => {
       const newValue = !prev;
       localStorage.setItem("mgp_sound_muted", JSON.stringify(newValue));
+
+      if (newValue) {
+        stopBGM();
+      } else if (currentBgmPath) {
+        // Use setTimeout to ensure state update has propagated
+        setTimeout(() => playBGM(currentBgmPath), 0);
+      }
+
       return newValue;
     });
-  }, []);
+  }, [currentBgmPath, playBGM, stopBGM]);
 
-  // Update volume
   const updateVolume = useCallback((newVolume) => {
     setVolume(newVolume);
     localStorage.setItem("mgp_sound_volume", JSON.stringify(newVolume));
+
+    if (bgmPlayerRef.current) {
+      bgmPlayerRef.current.updateVolume(newVolume);
+    }
   }, []);
 
-  // Sound effect function
   const playSoundEffect = useCallback(
     (type) => {
       if (isMuted) return;
@@ -90,40 +193,26 @@ export function SoundProvider({ children }) {
         case "error":
           playError();
           break;
-        default:
-          break;
       }
     },
     [isMuted, playClick, playHover, playSuccess, playError]
   );
 
-  // BGM control functions
-  const playBGM = useCallback(
-    (bgmPath) => {
-      if (bgmPath !== currentBgmPath) {
-        stopBgmSound();
-        setCurrentBgmPath(bgmPath);
-      }
-    },
-    [currentBgmPath, stopBgmSound]
-  );
-
-  const stopBGM = useCallback(() => {
-    stopBgmSound();
-  }, [stopBgmSound]);
-
-  // Effect to handle BGM playback
   useEffect(() => {
-    if (!isMuted) {
-      stopBgmSound();
-      playBgmSound();
-    }
-    return () => stopBgmSound();
-  }, [currentBgmPath, isMuted, playBgmSound, stopBgmSound]);
+    return () => {
+      if (bgmPlayerRef.current) {
+        bgmPlayerRef.current.stop();
+      }
+      if (audioContextRef.current) {
+        audioContextRef.current.close();
+      }
+    };
+  }, []);
 
   const value = {
     isMuted,
     volume,
+    currentBgmPath,
     toggleMute,
     updateVolume,
     playSoundEffect,
