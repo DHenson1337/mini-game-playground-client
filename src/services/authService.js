@@ -1,6 +1,6 @@
-// services/authService.js
-
+// services/authService.js (FRONTEND)
 import { AUTH_ENDPOINTS } from "../utils/apiUrls";
+import { saveUserToSession } from "../utils/userSession";
 
 class AuthService {
   async login(username, password, rememberMe = false) {
@@ -82,7 +82,7 @@ class AuthService {
       }
 
       const data = await response.json();
-      return data.authenticated;
+      return data.authenticated ? data : false;
     } catch (error) {
       console.error("Auth check failed:", error);
       return false;
@@ -100,6 +100,13 @@ class AuthService {
         throw new Error("Token refresh failed");
       }
 
+      const data = await response.json();
+
+      // Update user session data if needed
+      if (data.user) {
+        saveUserToSession(data.user);
+      }
+
       return true;
     } catch (error) {
       console.error("Token refresh failed:", error);
@@ -108,5 +115,5 @@ class AuthService {
   }
 }
 
-const authService = new AuthService();
-export default authService;
+// Export as singleton
+export default new AuthService();
