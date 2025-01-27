@@ -16,6 +16,10 @@
 
   /* Transitions */
   --transition-speed: 0.3s;
+
+  /* Fonts */
+  --font-game: "Press Start 2P", cursive;
+  --font-primary: Arial, sans-serif;
 }
 
 /* Global scrollbar styles */
@@ -42,22 +46,4 @@
 /* When user hovers over scrollable area */
 *:hover::-webkit-scrollbar-thumb {
   background-color: var(--primary);
-}
-
-/* For future use with the gaming font */
-@font-face {
-  font-family: "Press Start 2P";
-  src: url("/fonts/PressStart2P-Regular.ttf") format("truetype");
-}
-
-/* Gaming font utility classes - to be used after font implementation */
-.game-title {
-  font-family: "Press Start 2P", cursive;
-  letter-spacing: 2px;
-}
-
-.game-text {
-  font-family: "Press Start 2P", cursive;
-  font-size: 0.8em; /* Gaming fonts tend to be larger */
-  letter-spacing: 1px;
 }

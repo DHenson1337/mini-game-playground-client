@@ -1,0 +1,138 @@
+/* src/styles/responsive.css */
+
+/* Base variables for different screen sizes */
+:root {
+  /* Container max-widths */
+  --container-sm: 540px;
+  --container-md: 720px;
+  --container-lg: 960px;
+  --container-xl: 1140px;
+  --container-xxl: 1320px;
+  --container-ultrawide: 1600px;
+
+  /* Spacing adjustments for different screens */
+  --spacing-multiplier: 1;
+}
+
+/* Mobile First Approach */
+
+/* Extra small devices (phones, up to 576px) */
+/* This is our base styling, no media query needed */
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+  :root {
+    --spacing-multiplier: 1.1;
+  }
+
+  .container {
+    max-width: var(--container-sm);
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+  }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  :root {
+    --spacing-multiplier: 1.2;
+  }
+
+  .container {
+    max-width: var(--container-md);
+  }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  :root {
+    --spacing-multiplier: 1.3;
+  }
+
+  .container {
+    max-width: var(--container-lg);
+  }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  :root {
+    --spacing-multiplier: 1.4;
+  }
+
+  .container {
+    max-width: var(--container-xl);
+  }
+}
+
+/* XXL devices (larger desktops, 1400px and up) */
+@media (min-width: 1400px) {
+  :root {
+    --spacing-multiplier: 1.5;
+  }
+
+  .container {
+    max-width: var(--container-xxl);
+  }
+}
+
+/* Ultrawide screens (1920px and up) */
+@media (min-width: 1920px) {
+  :root {
+    --spacing-multiplier: 1.6;
+  }
+
+  .container {
+    max-width: var(--container-ultrawide);
+  }
+
+  /* Adjust game grid for ultrawide */
+  .games-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+}
+
+/* Component-specific responsive adjustments */
+
+/* Navigation */
+@media (max-width: 768px) {
+  .nav-center {
+    display: none; /* Hide on mobile */
+  }
+
+  .navbar {
+    padding: calc(var(--spacing-sm) * var(--spacing-multiplier));
+  }
+}
+
+/* Game View */
+@media (max-width: 992px) {
+  .game-container {
+    padding: calc(var(--spacing-md) * var(--spacing-multiplier));
+  }
+}
+
+/* Landing Page */
+@media (max-width: 576px) {
+  .landing-title h1 {
+    font-size: calc(var(--font-size-3xl) * var(--spacing-multiplier));
+  }
+}
+
+/* Leaderboard */
+@media (max-width: 992px) {
+  .leaderboard-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Profile Page */
+@media (max-width: 768px) {
+  .profile-card {
+    padding: calc(var(--spacing-md) * var(--spacing-multiplier));
+  }
+
+  .avatar-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

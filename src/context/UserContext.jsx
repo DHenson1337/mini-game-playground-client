@@ -30,18 +30,14 @@ export function UserProvider({ children }) {
     const initializeAuth = async () => {
       try {
         setLoading(true);
-
-        // First try to get user from session storage
         const sessionUser = getUserFromSession();
 
         if (sessionUser) {
-          // Verify with server
           const isAuthenticated = await authService.checkAuth();
 
           if (isAuthenticated && mounted) {
             setUser(sessionUser);
           } else {
-            // Try token refresh if server auth fails
             const refreshed = await authService.refreshToken();
             if (refreshed && mounted) {
               const recheck = await authService.checkAuth();
@@ -55,7 +51,6 @@ export function UserProvider({ children }) {
             }
           }
         } else {
-          // No stored user, try refresh
           const refreshed = await authService.refreshToken();
           if (refreshed && mounted) {
             const authCheck = await authService.checkAuth();
@@ -81,13 +76,12 @@ export function UserProvider({ children }) {
 
     initializeAuth();
 
-    // Cleanup
     return () => {
       mounted = false;
     };
   }, []);
 
-  // Set up periodic token refresh
+  // Token refresh interval
   useEffect(() => {
     if (!user) return;
 
@@ -102,7 +96,6 @@ export function UserProvider({ children }) {
     return () => clearInterval(refreshInterval);
   }, [user]);
 
-  // Other context functions...
   const login = async (userData) => {
     setUser(userData);
     saveUserToSession(userData);
@@ -119,12 +112,27 @@ export function UserProvider({ children }) {
     }
   };
 
+  // Add updateUser function
+  const updateUser = async (updatedUserData) => {
+    try {
+      // Update the user state
+      setUser(updatedUserData);
+      // Update the session storage
+      saveUserToSession(updatedUserData);
+      return true;
+    } catch (error) {
+      console.error("Failed to update user:", error);
+      throw error;
+    }
+  };
+
   const value = {
     user,
     loading,
     error,
     login,
     logout,
+    updateUser, // Add updateUser to the context value
   };
 
   if (loading) {

@@ -1,114 +1,175 @@
 # Mini Game Playground - Frontend
 
-A React-based gaming platform featuring classic games with modern styling and real-time features.
+A modern web-based gaming platform featuring classic games with MMO-style UI, real-time leaderboards, and user authentication.
 
-## Features
+## 🎮 Features
 
-- 🎮 Multiple Classic Games
-  - Tetris
-  - Tic Tac Toe
-  - Snake
-- 🏆 Real-time Leaderboards
-- 🎵 Dynamic Sound System
-- 🔐 User Authentication
-- 👤 Guest Access
-- 💾 Score Persistence
-- 🎨 Modern UI with Glassmorphism Design
+- **Classic Games Collection**
+  - Tetris with score tracking
+  - Tic Tac Toe with AI opponent
+  - Snake with customizable gameplay
+- **Modern Interface**
+  - MMO-inspired design
+  - Pixel font styling
+  - Glassmorphism effects
+  - Smooth page transitions
+- **User System**
+  - Secure authentication
+  - Guest play support
+  - Profile customization
+  - Avatar selection
+- **Real-time Features**
+  - Live leaderboards
+  - Score tracking
+  - User presence
+- **Sound System**
+  - Game-specific background music
+  - Interactive sound effects
+  - Volume controls
+  - Sound preferences persistence
 
-## Tech Stack
+## 🛠️ Tech Stack
 
-- React 18
-- Socket.IO Client
-- Framer Motion
-- React Router
-- Zustand (State Management)
+- **Core**
+  - React 18
+  - Vite
+  - React Router v7
+- **State & Real-time**
+  - Socket.IO Client
+  - Zustand
+- **Styling & Animation**
+  - Custom CSS (No frameworks)
+  - Framer Motion
+  - Press Start 2P Font
 
-## Prerequisites
+## 📋 Prerequisites
 
 - Node.js 20.x or higher
 - npm 9.x or higher
+- Modern web browser with WebSocket support
 
-## Installation
+## 🚀 Getting Started
 
-1. Clone the repository:
+1. **Clone the repository:**
 
    ```bash
    git clone [your-repo-url]
    cd mini-game-playground-client
    ```
 
-2. Install dependencies:
+2. **Install dependencies:**
 
    ```bash
    npm install
    ```
 
-3. Create a .env file:
+3. **Configure environment:**
+   Create a `.env` file:
 
    ```env
    VITE_BACKEND_URL=http://localhost:5000
    ```
 
-4. Start the development server:
+4. **Start development server:**
+
    ```bash
    npm run dev
    ```
 
-## Environment Variables
+5. **Access the application:**
+   Open [http://localhost:5173](http://localhost:5173) in your browser
 
-- `VITE_BACKEND_URL`: URL of the backend server
+## 🔧 Configuration
 
-## Project Structure
+### Environment Variables
+
+| Variable           | Description        | Default                 |
+| ------------------ | ------------------ | ----------------------- |
+| `VITE_BACKEND_URL` | Backend server URL | `http://localhost:5000` |
+
+## 📁 Project Structure
 
 ```
 src/
-├── components/
-│   ├── games/         # Game components
-│   ├── layout/        # Layout components
-│   └── ui/           # Reusable UI components
-├── context/          # React context providers
-├── pages/           # Page components
-├── services/        # API and service logic
-├── styles/          # Global styles
-└── utils/          # Utility functions
+├── assets/          # Static assets (images, sounds)
+│   ├── avatars/
+│   ├── sounds/
+│   └── logos/
+├── components/      # Reusable components
+│   ├── games/      # Game implementations
+│   ├── layout/     # Layout components
+│   └── ui/         # UI components
+├── context/        # React contexts
+├── pages/          # Page components
+├── services/       # API services
+├── styles/         # Global styles
+└── utils/         # Utility functions
 ```
 
-## Game Integration
+## 🎮 Games
 
-To add a new game:
+### Currently Available
+
+1. **Tetris**
+
+   - Classic block-stacking gameplay
+   - Score multipliers
+   - Level progression
+
+2. **Tic Tac Toe**
+
+   - AI opponent
+   - Multiple difficulty levels
+   - Score tracking
+
+3. **Snake**
+   - Classic snake gameplay
+   - Edge wrapping option
+   - Progressive difficulty
+
+### Adding New Games
 
 1. Create game component in `src/components/games/`
-2. Add game data to backend initialization
-3. Update game selection page
-4. Add score handling
-5. Update leaderboard compatibility
+2. Implement score tracking
+3. Add to game selection page
+4. Configure leaderboard support
+5. Add sound effects and music
 
-## Available Scripts
+## 📝 Available Scripts
 
-- `npm run dev`: Start development server
-- `npm run build`: Build for production
-- `npm run preview`: Preview production build
-- `npm run lint`: Run ESLint
+| Command           | Description              |
+| ----------------- | ------------------------ |
+| `npm run dev`     | Start development server |
+| `npm run build`   | Build for production     |
+| `npm run preview` | Preview production build |
+| `npm run lint`    | Run ESLint               |
 
-## Features in Development
+## 🔜 Roadmap
 
-- Achievement System
-- Profile Customization
-- Additional Games
-- Multiplayer Support
+- [ ] Achievement system
+- [ ] Additional games
+- [ ] Multiplayer support
+- [ ] Friend system
+- [ ] Mobile responsiveness
+- [ ] Dark/Light theme toggle
 
-## Contributing
+## 🤝 Contributing
 
 1. Fork the repository
-2. Create feature branch
-3. Commit changes
-4. Push to branch
-5. Open pull request
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## License
+## 📄 License
 
-[Pending...]
+[Your License] - See LICENSE.md for details
 
-## Credits
+## 👏 Credits
 
-See CREDITS.md for full attribution of assets and libraries used.
+See [CREDITS.md](./CREDITS.md) for full attribution of assets and libraries used.
+
+## 🔗 Related Repositories
+
+- [Backend Repository](https://github.com/DHenson1337/mini-game-playground-server)
+- [Live Demo](https://mini-game-playground.netlify.app/)

@@ -17,13 +17,18 @@ import PageTransition from "./components/PageTransition";
 import GameTransition from "./components/GameTransition";
 import Credits from "./pages/Credits";
 import Achievements from "./pages/Achievements";
+import FontLoader from "./components/FontLoader";
 // import TestAuth from "./TestAuth"; For testing
 // import TestLogin from "./TestLogin"; //Temp for Testing
+
+//Fonts
+import "./styles/gameTypography.css";
 
 function App() {
   return (
     <UserProvider>
       <SoundProvider>
+        <FontLoader />
         <BackgroundEffects />
         <PageMusic />
         <AnimatePresence>

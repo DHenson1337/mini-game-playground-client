@@ -1,5 +1,75 @@
 /* LandingPage.css - Complete Styles */
 
+/* Landing Page specific typography */
+.landing-container {
+  font-family: var(--font-game);
+}
+
+/* Make title larger */
+.landing-title h1 {
+  font-size: calc(var(--font-size-4xl) * 2); /* Double the size */
+  margin-bottom: 2rem;
+  text-shadow: 0 0 20px var(--primary), 0 0 40px var(--primary);
+}
+
+/* Auth tabs */
+.auth-tabs button {
+  font-family: var(--font-game);
+  font-size: var(--font-size-sm);
+}
+
+/* Form elements */
+.landing-form {
+  font-family: var(--font-game);
+}
+
+.landing-form .form-input {
+  font-family: var(--font-primary); /* Keep regular font for inputs */
+  font-size: var(--font-size-lg);
+}
+
+.landing-form label {
+  font-family: var(--font-game);
+  font-size: var(--font-size-xs);
+}
+
+/* Buttons */
+.submit-button,
+.guest-button {
+  font-family: var(--font-game);
+  font-size: var(--font-size-sm);
+  padding: 1rem; /* Add more padding to accommodate the pixel font */
+}
+
+/* Avatar selection */
+.form-label {
+  font-family: var(--font-game);
+  font-size: var(--font-size-xs);
+}
+
+/* Remember me checkbox label */
+.remember-me label {
+  font-family: var(--font-game);
+  font-size: var(--font-size-xs);
+}
+
+/* Error messages - keep regular font for readability */
+.error-popup {
+  font-family: var(--font-primary);
+  font-size: var(--font-size-sm);
+}
+
+/* Success overlay */
+.success-content h2 {
+  font-family: var(--font-game);
+  font-size: var(--font-size-2xl);
+}
+
+.success-content p {
+  font-family: var(--font-game);
+  font-size: var(--font-size-sm);
+}
+
 /* Main container */
 .landing-container {
   min-height: 100vh;

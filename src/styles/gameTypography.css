@@ -1,0 +1,153 @@
+/* Game Typography Variables */
+:root {
+  --font-game: "Press Start 2P", cursive;
+  --font-primary: Arial, sans-serif;
+
+  /* Font sizes - significantly reduced for pixel font */
+  --font-size-xs: 0.5rem; /* ~8px */
+  --font-size-sm: 0.563rem; /* ~9px */
+  --font-size-base: 0.625rem; /* 10px */
+  --font-size-lg: 0.688rem; /* ~11px */
+  --font-size-xl: 0.75rem; /* 12px */
+  --font-size-2xl: 0.875rem; /* 14px */
+  --font-size-3xl: 1rem; /* 16px */
+  --font-size-4xl: 1.125rem; /* 18px */
+}
+
+/* Global font application */
+body {
+  font-family: var(--font-game);
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  letter-spacing: 1px;
+}
+
+/* Headers with adjusted sizes */
+h1 {
+  font-size: var(--font-size-3xl);
+  line-height: 1.4;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-size: var(--font-size-2xl);
+  line-height: 1.4;
+  margin-bottom: 0.75rem;
+}
+
+h3 {
+  font-size: var(--font-size-xl);
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+}
+
+/* Specific component adjustments */
+.navbar {
+  font-size: var(--font-size-xs);
+}
+
+.nav-center a {
+  font-size: var(--font-size-xs);
+  padding: 0.25rem 0.5rem;
+}
+
+.dropdown-menu {
+  font-size: var(--font-size-xs);
+}
+
+/* Game-specific text */
+.game-score {
+  font-size: var(--font-size-2xl);
+  letter-spacing: 2px;
+  color: var(--primary);
+}
+
+.game-title {
+  font-size: var(--font-size-2xl);
+}
+
+.game-controls {
+  font-size: var(--font-size-xs);
+}
+
+/* Keep regular font for better usability */
+input,
+textarea,
+select,
+button {
+  font-family: var(--font-primary);
+  font-size: var(--font-size-base);
+}
+
+/* Game card info */
+.game-card-info h3 {
+  font-size: var(--font-size-xs);
+}
+
+/* Leaderboard */
+.score-row {
+  font-size: var(--font-size-xs);
+}
+
+/* Profile page */
+.profile-title {
+  font-size: var(--font-size-2xl);
+}
+
+.section-title {
+  font-size: var(--font-size-xl);
+}
+
+/* Form labels and hints */
+.form-label {
+  font-size: var(--font-size-xs);
+}
+
+.input-hint {
+  font-family: var(--font-primary);
+  font-size: var(--font-size-xs);
+}
+
+/* Error and success messages - keep regular font for clarity */
+.error-message,
+.success-message,
+.alert {
+  font-family: var(--font-primary);
+  font-size: var(--font-size-sm);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  :root {
+    --font-size-xs: 0.438rem; /* ~7px */
+    --font-size-sm: 0.5rem; /* 8px */
+    --font-size-base: 0.563rem; /* 9px */
+    --font-size-lg: 0.625rem; /* 10px */
+    --font-size-xl: 0.688rem; /* ~11px */
+    --font-size-2xl: 0.75rem; /* 12px */
+    --font-size-3xl: 0.875rem; /* 14px */
+    --font-size-4xl: 1rem; /* 16px */
+  }
+}
+
+/* Landing page specific */
+.landing-title h1 {
+  font-size: var(--font-size-4xl);
+}
+
+/* Game preview title */
+.preview-info h2 {
+  font-size: var(--font-size-2xl);
+}
+
+/* Keep some UI elements in regular font */
+.game-stats,
+.stat-item {
+  font-family: var(--font-primary);
+  font-size: var(--font-size-sm);
+}
+
+/* Fallback handling */
+.fonts-failed {
+  --font-game: var(--font-primary);
+}

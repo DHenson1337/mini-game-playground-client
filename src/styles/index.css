@@ -1,6 +1,8 @@
 /* Import variables */
 @import "./variables.css";
 @import "./background.css";
+@import "./gameTypography.css";
+@import "./responsive.css";
 
 /* Reset and base styles */
 * {

@@ -5,10 +5,10 @@ function Layout() {
   return (
     <div>
       <Navbar />
-      <main>
+      <main className="container">
         <Outlet />
       </main>
-      <footer>
+      <footer className="container">
         <p>© 2025 Mini Game Playground</p>
       </footer>
     </div>

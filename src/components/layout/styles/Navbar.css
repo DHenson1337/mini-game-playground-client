@@ -1,3 +1,38 @@
+/* Navbar Typography */
+/* Todo Clean this Css and remove extra settings at the bottom */
+.navbar {
+  font-family: var(--font-game);
+}
+
+.nav-center a {
+  font-family: var(--font-game);
+  font-size: var(--font-size-xs);
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+  font-family: var(--font-game);
+}
+
+.dropdown-menu a,
+.logout-button {
+  font-family: var(--font-game);
+  font-size: var(--font-size-xs);
+  text-align: left;
+  width: 100%;
+}
+
+.dropdown-username {
+  font-family: var(--font-game);
+  font-size: var(--font-size-xs);
+}
+
+/* Logo text if any */
+.logo-text {
+  font-family: var(--font-game);
+  font-size: var(--font-size-lg);
+}
+
 /* Enhanced Navbar with Video Game Style */
 .navbar {
   background: rgba(0, 0, 0, 0.95);
@@ -179,6 +214,106 @@
   background: #ff4444;
   color: white;
   text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+}
+
+/* Responsive Navbar */
+.navbar {
+  padding: var(--spacing-md) var(--spacing-lg);
+  position: relative;
+}
+
+/* Desktop (default) */
+@media (min-width: 1024px) {
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .nav-left {
+    min-width: 200px;
+  }
+
+  .nav-center {
+    display: flex;
+    gap: var(--spacing-lg);
+    justify-content: center;
+    flex-grow: 1;
+  }
+
+  .nav-right {
+    min-width: 200px;
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+/* Tablet */
+@media (max-width: 1023px) {
+  .navbar {
+    flex-direction: column;
+    padding: var(--spacing-sm);
+  }
+
+  .nav-left {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .nav-center {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: var(--spacing-sm);
+    margin: var(--spacing-sm) 0;
+  }
+
+  .nav-right {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .navbar {
+    padding: var(--spacing-sm);
+  }
+
+  .logo-image {
+    height: 32px;
+  }
+
+  .nav-center {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .nav-center a {
+    padding: var(--spacing-sm);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .dropdown-menu {
+    width: 100%;
+    left: 0;
+    right: 0;
+  }
+}
+
+/* Ultra-wide screens */
+@media (min-width: 1920px) {
+  .navbar {
+    padding: var(--spacing-lg) calc(var(--spacing-lg) * 2);
+  }
+
+  .nav-center {
+    gap: var(--spacing-xl);
+  }
 }
 
 @keyframes dropdownAppear {
